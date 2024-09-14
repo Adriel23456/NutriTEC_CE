@@ -1,0 +1,68 @@
+.toolbar {
+  background-color: #1A485B; /* Fondo oscuro */
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px; /* Padding ajustado */
+  border-bottom: 4px solid black; /* Borde negro más ancho en la parte inferior */
+}
+  
+.session-info {
+  flex-grow: 1;
+  text-align: center;
+  color: white; /* Asegura que el texto sea blanco */
+  font-size: 20px; /* Tamaño de fuente más grande para el título */
+  font-weight: bold; /* Fuente en negrita para destacar */
+  text-shadow: 1px 1px 2px black; /* Delineado para mayor visibilidad */
+}
+    
+.custom-background {
+  background-color: #E07B4F;
+  color: white;
+  padding: 7px 55px;
+  font-size: 25px;
+  border-radius: 9px;
+}
+    
+.logout-button {
+  background-color: #E07B4F; /* Mismo estilo que el botón del menú */
+  color: whitesmoke;
+  font-size: 16px;
+}
+    
+input {
+  border: none;
+  background-color: transparent;
+  color: red;
+  font-size: 18px; /* Asegura que el tamaño del texto sea adecuado */
+  pointer-events: none; /* Deshabilita la interacción del usuario con el campo de texto */
+}
+    
+.mat-drawer {
+  background-color: #1A485B;
+  color: red;
+}
+    
+.mat-drawer-container,
+.mat-drawer-content,
+.mat-sidenav-content {
+  background: transparent;
+  height: 100%;
+  width: 100%;
+}
+    
+.custom-background-drawer,
+.mat-nav-list {
+  overflow-y: hidden;
+}
+    
+.mat-nav-list .mat-list-item .mat-icon,
+.mat-nav-list .mat-list-item {
+  color: red; /* Asegura que el color de los íconos y el texto sea rojo */
+}
+    
+.mat-nav-list .mat-list-item .custom-background {
+  color: red; /* Mantiene el texto rojo en los sub-botones */
+  background-color: transparent; /* Fondo transparente para los sub-botones */
+}  
