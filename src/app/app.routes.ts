@@ -1,7 +1,11 @@
 import { Routes } from '@angular/router';
 import { AuthenticationComponent } from './Components/Authentication/authentication/authentication.component';
 import { SidenavClientComponent } from './Components/ClientView/sidenav-client/sidenav-client.component';
-import { authenticationGuard } from './Guards/Authentication/authentication.guard';
+import { authenticationClientGuard } from './Guards/Client/authentication-client.guard';
+import { SidenavAdminComponent } from './Components/AdminView/sidenav-admin/sidenav-admin.component';
+import { authenticationAdminGuard } from './Guards/Admin/authentication-admin.guard';
+import { SidenavNutritionistComponent } from './Components/NutritionistView/sidenav-nutritionist/sidenav-nutritionist.component';
+import { authenticationNutritionistGuard } from './Guards/Nutritionist/authentication-nutritionist.guard';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -9,19 +13,19 @@ export const routes: Routes = [
     {
         path: 'sidenavClient',
         component: SidenavClientComponent,
-        canActivate: [authenticationGuard],
+        canActivate: [authenticationClientGuard],
         children: []
     },
     {
       path: 'sidenavAdmin',
-      component: SidenavClientComponent,
-      canActivate: [authenticationGuard],
+      component: SidenavAdminComponent,
+      canActivate: [authenticationAdminGuard],
       children: []
     },
     {
       path: 'sidenavNutri',
-      component: SidenavClientComponent,
-      canActivate: [authenticationGuard],
+      component: SidenavNutritionistComponent,
+      canActivate: [authenticationNutritionistGuard],
       children: []
     },
     { path: '**', redirectTo: '/sidenavClient' }

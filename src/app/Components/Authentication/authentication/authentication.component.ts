@@ -28,8 +28,13 @@ export class AuthenticationComponent {
   onLogin(): void {
     this.authenticationService.login(this.email, this.password).subscribe(user => {
       if (user) {
-        console.log('Login successful!', user);
-        this.router.navigate(['/sidenavClient']);
+        if (user.e_domain == 'nutriTECAdmin.com'){
+          this.router.navigate(['/sidenavAdmin']);
+        } else if (user.e_domain == 'nutriTECNutri.com') {
+          this.router.navigate(['/sidenavNutri']);
+        } else {
+          this.router.navigate(['/sidenavClient']);
+        }
       } else {
         console.error('Login failed');
         this.openDialog('Error de Autenticación', 'Credenciales inválidas. Por favor, intente de nuevo.');

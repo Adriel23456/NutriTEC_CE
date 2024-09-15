@@ -36,7 +36,7 @@ import {AuthenticationService} from "../../../Services/Authentication/authentica
   styleUrl: './sidenav-admin.component.css'
 })
 export class SidenavAdminComponent {
-  currentSessionName: string = this.authService.currentUserValue ? this.authService.currentUserValue.name : '';
+  currentSessionName: string = this.authService.currentUserValue ? this.authService.currentUserValue.username : '';
   constructor(private authService: AuthenticationService, private router: Router) {}
 
   // Función para manejar el cierre de sesión

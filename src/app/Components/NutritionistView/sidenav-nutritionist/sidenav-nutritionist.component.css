@@ -12,7 +12,7 @@
   flex-grow: 1;
   text-align: center;
   color: white; /* Asegura que el texto sea blanco */
-  font-size: 20px; /* Tamaño de fuente más grande para el título */
+  font-size: 22px; /* Tamaño de fuente más grande para el título */
   font-weight: bold; /* Fuente en negrita para destacar */
   text-shadow: 1px 1px 2px black; /* Delineado para mayor visibilidad */
 }
