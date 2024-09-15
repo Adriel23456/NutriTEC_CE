@@ -10,25 +10,19 @@ export const routes: Routes = [
         path: 'sidenavClient',
         component: SidenavClientComponent,
         canActivate: [authenticationGuard],
-        children: [
-          { path: '', redirectTo: 'register', pathMatch: 'full' },
-        ]
+        children: []
     },
     {
       path: 'sidenavAdmin',
       component: SidenavClientComponent,
       canActivate: [authenticationGuard],
-      children: [
-        { path: '', redirectTo: 'register', pathMatch: 'full' },
-      ]
+      children: []
     },
     {
       path: 'sidenavNutri',
       component: SidenavClientComponent,
       canActivate: [authenticationGuard],
-      children: [
-        { path: '', redirectTo: 'register', pathMatch: 'full' },
-      ]
+      children: []
     },
-    { path: '**', redirectTo: '/login' }
+    { path: '**', redirectTo: '/sidenavClient' }
 ];

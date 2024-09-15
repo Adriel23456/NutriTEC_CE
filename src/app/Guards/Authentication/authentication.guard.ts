@@ -9,7 +9,6 @@ export const authenticationGuard: CanActivateFn = (route: ActivatedRouteSnapshot
   if (currentUser) {
     return true; // Usuario está autenticado
   } else{
-    console.log("VA A REDIRIGIR AL LOGIN")
     return router.createUrlTree(['/login']); // Redirige a login si no está autenticado
   }
 };
