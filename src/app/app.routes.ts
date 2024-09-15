@@ -11,10 +11,10 @@ export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'login', component: AuthenticationComponent },
     {
-        path: 'sidenavClient',
-        component: SidenavClientComponent,
-        canActivate: [authenticationClientGuard],
-        children: []
+      path: 'sidenavClient',
+      component: SidenavClientComponent,
+      canActivate: [authenticationClientGuard],
+      children: []
     },
     {
       path: 'sidenavAdmin',
