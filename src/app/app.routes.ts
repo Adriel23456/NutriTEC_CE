@@ -6,6 +6,7 @@ import { SidenavAdminComponent } from './Components/AdminView/sidenav-admin/side
 import { authenticationAdminGuard } from './Guards/Admin/authentication-admin.guard';
 import { SidenavNutritionistComponent } from './Components/NutritionistView/sidenav-nutritionist/sidenav-nutritionist.component';
 import { authenticationNutritionistGuard } from './Guards/Nutritionist/authentication-nutritionist.guard';
+import { AdminRegisterComponent } from './Components/AdminView/admin-register/admin-register.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -20,7 +21,10 @@ export const routes: Routes = [
       path: 'sidenavAdmin',
       component: SidenavAdminComponent,
       canActivate: [authenticationAdminGuard],
-      children: []
+      children: [
+        { path: '', redirectTo: 'register', pathMatch: 'full' },
+        { path: 'register', component: AdminRegisterComponent }
+      ]
     },
     {
       path: 'sidenavNutri',
