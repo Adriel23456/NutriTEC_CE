@@ -1,0 +1,126 @@
+<div class="register-container">
+  <div class="header">
+    <h2>Registro de Cliente</h2>
+    <button class="return-button" (click)="onReturn()">Regresar</button>
+  </div>
+  
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <input matInput placeholder="ID (Cédula)" formControlName="id" required>
+      <mat-error *ngIf="registerForm.get('id')?.hasError('required')">Este campo es obligatorio</mat-error>
+      <mat-error *ngIf="registerForm.get('id')?.hasError('pattern')">Solo se permiten números</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Edad" formControlName="age" type="number" required>
+      <mat-error *ngIf="registerForm.get('age')?.hasError('required')">Este campo es obligatorio</mat-error>
+      <mat-error *ngIf="registerForm.get('age')?.hasError('min')">La edad debe ser mayor a 0</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Contraseña" formControlName="password" type="password" required>
+      <mat-error *ngIf="registerForm.get('password')?.hasError('required')">Este campo es obligatorio</mat-error>
+      <mat-error *ngIf="registerForm.get('password')?.hasError('minlength')">La contraseña debe tener al menos 6 caracteres</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Confirmar Contraseña" formControlName="confirmPassword" type="password" required>
+      <mat-error *ngIf="registerForm.get('confirmPassword')?.hasError('required')">Este campo es obligatorio</mat-error>
+      <mat-error *ngIf="registerForm.hasError('passwordMismatch')">Las contraseñas no coinciden</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker" placeholder="Fecha de nacimiento" formControlName="birthdate" required>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="registerForm.get('birthdate')?.hasError('required')">Este campo es obligatorio</mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <input matInput placeholder="Email" formControlName="email" type="email" required>
+      <mat-error *ngIf="registerForm.get('email')?.hasError('required')">Este campo es obligatorio</mat-error>
+      <mat-error *ngIf="registerForm.get('email')?.hasError('email')">Email inválido</mat-error>
+    </mat-form-field>
+
+    <div formGroupName="fullname" class="full-width form-group">
+      <mat-form-field>
+        <input matInput placeholder="Nombre" formControlName="name" required>
+        <mat-error *ngIf="registerForm.get('fullname.name')?.hasError('required')">Este campo es obligatorio</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Primer apellido" formControlName="firstlastName" required>
+        <mat-error *ngIf="registerForm.get('fullname.firstlastName')?.hasError('required')">Este campo es obligatorio</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Segundo apellido" formControlName="secondlastName" required>
+        <mat-error *ngIf="registerForm.get('fullname.secondlastName')?.hasError('required')">Este campo es obligatorio</mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field>
+      <input matInput placeholder="Nombre de usuario" formControlName="username" required>
+      <mat-error *ngIf="registerForm.get('username')?.hasError('required')">Este campo es obligatorio</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Porcentaje de grasa" formControlName="fatPercentage" type="number" required>
+      <mat-error *ngIf="registerForm.get('fatPercentage')?.hasError('required')">Este campo es obligatorio</mat-error>
+      <mat-error *ngIf="registerForm.get('fatPercentage')?.hasError('min')">El porcentaje debe ser mayor o igual a 0</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Consumo diario máximo" formControlName="maximumDailyConsumption" type="number" required>
+      <mat-error *ngIf="registerForm.get('maximumDailyConsumption')?.hasError('required')">Este campo es obligatorio</mat-error>
+      <mat-error *ngIf="registerForm.get('maximumDailyConsumption')?.hasError('min')">El consumo debe ser mayor a 0</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Porcentaje de músculo" formControlName="musclePercentage" type="number" required>
+      <mat-error *ngIf="registerForm.get('musclePercentage')?.hasError('required')">Este campo es obligatorio</mat-error>
+      <mat-error *ngIf="registerForm.get('musclePercentage')?.hasError('min')">El porcentaje debe ser mayor o igual a 0</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="País" formControlName="country" required>
+      <mat-error *ngIf="registerForm.get('country')?.hasError('required')">Este campo es obligatorio</mat-error>
+    </mat-form-field>
+
+    <div formGroupName="inicialMeasures" class="full-width form-group">
+      <mat-form-field>
+        <input matInput placeholder="Medida de cadera" formControlName="im_Hip" type="number" required>
+        <mat-error *ngIf="registerForm.get('inicialMeasures.im_Hip')?.hasError('required')">Este campo es obligatorio</mat-error>
+        <mat-error *ngIf="registerForm.get('inicialMeasures.im_Hip')?.hasError('min')">La medida debe ser mayor a 0</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Medida de cuello" formControlName="im_Neck" type="number" required>
+        <mat-error *ngIf="registerForm.get('inicialMeasures.im_Neck')?.hasError('required')">Este campo es obligatorio</mat-error>
+        <mat-error *ngIf="registerForm.get('inicialMeasures.im_Neck')?.hasError('min')">La medida debe ser mayor a 0</mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput placeholder="Medida de cintura" formControlName="im_Waist" type="number" required>
+        <mat-error *ngIf="registerForm.get('inicialMeasures.im_Waist')?.hasError('required')">Este campo es obligatorio</mat-error>
+        <mat-error *ngIf="registerForm.get('inicialMeasures.im_Waist')?.hasError('min')">La medida debe ser mayor a 0</mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field>
+      <input matInput placeholder="IMC (Índice de Masa Corporal)" formControlName="imc" type="number" required>
+      <mat-error *ngIf="registerForm.get('imc')?.hasError('required')">Este campo es obligatorio</mat-error>
+      <mat-error *ngIf="registerForm.get('imc')?.hasError('min')">El IMC debe ser mayor a 0</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="Peso actual" formControlName="currentWeight" type="number" required>
+      <mat-error *ngIf="registerForm.get('currentWeight')?.hasError('required')">Este campo es obligatorio</mat-error>
+      <mat-error *ngIf="registerForm.get('currentWeight')?.hasError('min')">El peso debe ser mayor a 0</mat-error>
+    </mat-form-field>
+
+    <div class="button-container">
+      <button mat-raised-button color="primary" type="submit">Registrar</button>
+    </div>
+  </form>
+</div>

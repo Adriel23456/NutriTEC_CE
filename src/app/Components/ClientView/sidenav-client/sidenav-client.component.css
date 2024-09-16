@@ -7,7 +7,7 @@
   padding: 0 10px; /* Padding ajustado */
   border-bottom: 4px solid black; /* Borde negro más ancho en la parte inferior */
 }
-  
+
 .session-info {
   flex-grow: 1;
   text-align: center;
@@ -16,7 +16,7 @@
   font-weight: bold; /* Fuente en negrita para destacar */
   text-shadow: 1px 1px 2px black; /* Delineado para mayor visibilidad */
 }
-    
+
 .custom-background {
   background-color: #E07B4F;
   color: white;
@@ -24,13 +24,13 @@
   font-size: 25px;
   border-radius: 9px;
 }
-    
+
 .logout-button {
   background-color: #E07B4F; /* Mismo estilo que el botón del menú */
   color: whitesmoke;
   font-size: 16px;
 }
-    
+
 input {
   border: none;
   background-color: transparent;
@@ -65,4 +65,13 @@ input {
 .mat-nav-list .mat-list-item .custom-background {
   color: red; /* Mantiene el texto rojo en los sub-botones */
   background-color: transparent; /* Fondo transparente para los sub-botones */
+}
+
+.mat-drawer-container {
+  height: calc(100vh - 64px); /* Ajusta 64px si la altura de tu toolbar es diferente */
+}
+
+.mat-drawer-content {
+  height: 100%;
+  overflow: auto;
 }

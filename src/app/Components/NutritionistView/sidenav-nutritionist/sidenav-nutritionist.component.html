@@ -1,4 +1,5 @@
-<mat-toolbar color="primary" class="toolbar">
+<div class="sidenav-container">
+  <mat-toolbar color="primary" class="toolbar">
     <button (click)="drawer.toggle()" class="custom-background">
       <mat-icon>menu</mat-icon>
     </button>
@@ -10,7 +11,7 @@
   </mat-toolbar>
   
   <!-- Para el sidebar-->
-  <mat-drawer-container >
+  <mat-drawer-container class="drawer-container">
     <!-- Cajón en el lado izquierdo -->
     <mat-drawer #drawer opened="false" mode="over" class="custom-background-drawer">
       <mat-nav-list >
@@ -55,3 +56,4 @@
       </div>
     </mat-drawer-content>
   </mat-drawer-container>
+</div>

@@ -66,3 +66,12 @@ input {
   color: red; /* Mantiene el texto rojo en los sub-botones */
   background-color: transparent; /* Fondo transparente para los sub-botones */
 }
+
+.mat-drawer-container {
+  height: calc(100vh - 64px); /* Ajusta 64px si la altura de tu toolbar es diferente */
+}
+
+.mat-drawer-content {
+  height: 100%;
+  overflow: auto;
+}

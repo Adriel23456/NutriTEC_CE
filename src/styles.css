@@ -1,4 +1,6 @@
-html { height: 100%; }
+html {
+  min-height: 100vh;
+}
 
 /* Define los colores como variables CSS para facilitar la referencia y mantenimiento */
 :root {
@@ -11,8 +13,6 @@ html { height: 100%; }
 /* Aplica un gradiente de fondo a todo el body de la aplicación */
 body {
   overflow-y: auto;
-  height: 100%;
-  min-height: 100vh;
   margin: 0;
   padding: 0;
   background: linear-gradient(135deg, 

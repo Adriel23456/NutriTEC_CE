@@ -21,9 +21,15 @@ export interface User {
 }
 
 const USERS: User[] = [
-  { id:118500818, age:22, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves@nutriTECAdmin.com', e_identifier: 'adriel.chaves', e_domain: 'nutriTECAdmin.com', fullname: 'Adriel Sebstian Chaves Salazar', name: 'Adriel Sebastian', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adriel23456' },
-  { id:118525818, age:20, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves23@nutriTECNutri.com', e_identifier: 'adriel.chaves23', e_domain: 'nutriTECNutri.com', fullname: 'Adriel Seb Chaves Salazar', name: 'Adriel Seb', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adriel23456' },
-  { id:118533818, age:18, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves23456@hotmail.com', e_identifier: 'adriel.chaves23456', e_domain: 'hotmail.com', fullname: 'Adriel S Chaves Salazar', name: 'Adriel S', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adriel23456' }
+  { id:118500811, age:22, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves@nutriTECAdmin.com', e_identifier: 'adriel.chaves', e_domain: 'nutriTECAdmin.com', fullname: 'Adriel Sebstian Chaves Salazar', name: 'Adriel Sebastian', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adrielAdmin' },
+  { id:128520812, age:23, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves444@nutriTECAdmin.com', e_identifier: 'adriel.chaves444', e_domain: 'nutriTECAdmin.com', fullname: 'Adriel Sebstian Chaves Salazar', name: 'Adriel Sebastian', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adriel23456' },
+  { id:128520813, age:24, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves555@nutriTECAdmin.com', e_identifier: 'adriel.chaves555', e_domain: 'nutriTECAdmin.com', fullname: 'Adriel Sebstian Chaves Salazar', name: 'Adriel Sebastian', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adriel23456' },
+  { id:118525814, age:20, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves23@nutriTECNutri.com', e_identifier: 'adriel.chaves23', e_domain: 'nutriTECNutri.com', fullname: 'Adriel Seb Chaves Salazar', name: 'Adriel Seb', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adrielNutri' },
+  { id:118525815, age:25, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves666@nutriTECNutri.com', e_identifier: 'adriel.chaves666', e_domain: 'nutriTECNutri.com', fullname: 'Adriel Seb Chaves Salazar', name: 'Adriel Seb', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adriel23456' },
+  { id:118525816, age:26, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves777@nutriTECNutri.com', e_identifier: 'adriel.chaves777', e_domain: 'nutriTECNutri.com', fullname: 'Adriel Seb Chaves Salazar', name: 'Adriel Seb', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adriel23456' },
+  { id:118533817, age:18, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves23456@hotmail.com', e_identifier: 'adriel.chaves23456', e_domain: 'hotmail.com', fullname: 'Adriel S Chaves Salazar', name: 'Adriel S', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adrielClient' },
+  { id:118533818, age:27, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves888@hotmail.com', e_identifier: 'adriel.chaves888', e_domain: 'hotmail.com', fullname: 'Adriel S Chaves Salazar', name: 'Adriel S', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adriel23456' },
+  { id:118533819, age:28, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves999@hotmail.com', e_identifier: 'adriel.chaves999', e_domain: 'hotmail.com', fullname: 'Adriel S Chaves Salazar', name: 'Adriel S', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adriel23456' }
 ];
 
 @Injectable({
@@ -62,8 +68,13 @@ export class AuthenticationService {
     }
   }
 
+  registerUser(user: User): Observable<User> {
+    USERS.push(user);
+    return of(user);
+  }
+
   login(email: string, password: string): Observable<User | null> {
-    const user = USERS.find(u => u.email === email && u.password === password);
+    const user = USERS.find(u => u.email === email && u.password === password); //Esto sera reemplazado por la base de datos...
     if (user) {
       localStorage.setItem('currentUser', JSON.stringify(user));
       this.currentUserSubject.next(user);
