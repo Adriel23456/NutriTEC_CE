@@ -79,9 +79,9 @@ export class RegisterClientComponent implements OnInit {
       }),
       imc: ['', [Validators.required, Validators.min(0)]],
       currentWeight: ['', [Validators.required, Validators.min(0)]]
-    });
+    }, { validators: this.passwordMatchValidator });
   }
-
+  
   ngOnInit(): void {
   }
 
