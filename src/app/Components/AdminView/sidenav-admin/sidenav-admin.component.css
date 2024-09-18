@@ -20,7 +20,7 @@
 .custom-background {
   background-color: #E07B4F;
   color: white;
-  padding: 7px 55px;
+  padding: 7px 95px;
   font-size: 25px;
   border-radius: 9px;
 }
@@ -40,8 +40,14 @@ input {
 }
 
 .mat-drawer {
+  min-width: 240px;
+  width: auto; /* Ajusta este valor según tus necesidades */
   background-color: #1A485B;
   color: red;
+}
+
+.mat-drawer .mat-nav-list {
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
 }
 
 .mat-drawer-container,

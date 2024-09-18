@@ -11,6 +11,15 @@ import { RegisterClientComponent } from './Components/Authentication/register-cl
 import { RegisterNutritionistComponent } from './Components/Authentication/register-nutritionist/register-nutritionist.component';
 import { StartInfoClientComponent } from './Components/ClientView/start-info-client/start-info-client.component';
 import { StartInfoNutritionistComponent } from './Components/NutritionistView/start-info-nutritionist/start-info-nutritionist.component';
+import { ConfirmProductComponent } from './Components/AdminView/confirm-product/confirm-product.component';
+import { ReportPaymentComponent } from './Components/AdminView/report-payment/report-payment.component';
+import { FoodPlanComponent } from './Components/ClientView/food-plan/food-plan.component';
+import { DailyRegisterComponent } from './Components/ClientView/daily-register/daily-register.component';
+import { AdvancementReportComponent } from './Components/ClientView/advancement-report/advancement-report.component';
+import { AdviceClientComponent } from './Components/NutritionistView/advice-client/advice-client.component';
+import { ManageFoodPlanComponent } from './Components/NutritionistView/manage-food-plan/manage-food-plan.component';
+import { ManageDishProductComponent } from './Components/ClientView/manage-dish-product/manage-dish-product.component';
+import { ManageDishProductNutritionistComponent } from './Components/NutritionistView/manage-dish-product-nutritionist/manage-dish-product-nutritionist.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -22,8 +31,12 @@ export const routes: Routes = [
       component: SidenavClientComponent,
       canActivate: [authenticationClientGuard],
       children: [
-        { path: '', redirectTo: 'start', pathMatch: 'full' },
-        { path: 'start', component: StartInfoClientComponent }
+        { path: '', redirectTo: 'startInfoClient', pathMatch: 'full' },
+        { path: 'startInfoClient', component: StartInfoClientComponent },
+        { path: 'manageDishProduct', component: ManageDishProductComponent },
+        { path: 'foodPlan', component: FoodPlanComponent },
+        { path: 'dailyRegister', component: DailyRegisterComponent },
+        { path: 'advancementReport', component: AdvancementReportComponent },
       ]
     },
     {
@@ -31,8 +44,10 @@ export const routes: Routes = [
       component: SidenavAdminComponent,
       canActivate: [authenticationAdminGuard],
       children: [
-        { path: '', redirectTo: 'register', pathMatch: 'full' },
-        { path: 'register', component: AdminRegisterComponent }
+        { path: '', redirectTo: 'registerAdmin', pathMatch: 'full' },
+        { path: 'registerAdmin', component: AdminRegisterComponent },
+        { path: 'confirmProduct', component: ConfirmProductComponent },
+        { path: 'reportPayment', component: ReportPaymentComponent }
       ]
     },
     {
@@ -40,8 +55,11 @@ export const routes: Routes = [
       component: SidenavNutritionistComponent,
       canActivate: [authenticationNutritionistGuard],
       children: [
-        { path: '', redirectTo: 'start', pathMatch: 'full' },
-        { path: 'start', component: StartInfoNutritionistComponent }
+        { path: '', redirectTo: 'startInfoNutri', pathMatch: 'full' },
+        { path: 'startInfoNutri', component: StartInfoNutritionistComponent },
+        { path: 'manageDishProduct', component: ManageDishProductNutritionistComponent },
+        { path: 'adviceClient', component: AdviceClientComponent },
+        { path: 'manageFoodPlan', component: ManageFoodPlanComponent }
       ]
     },
     { path: '**', redirectTo: '/sidenavClient' }

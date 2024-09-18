@@ -40,8 +40,14 @@ input {
 }
     
 .mat-drawer {
+  min-width: 240px;
+  width: auto; /* Ajusta este valor según tus necesidades */
   background-color: #1A485B;
   color: red;
+}
+
+.mat-drawer .mat-nav-list {
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
 }
     
 .mat-drawer-container,
