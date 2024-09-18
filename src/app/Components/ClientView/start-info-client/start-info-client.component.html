@@ -1,1 +1,66 @@
-<p>start-info-client works!</p>
+<div class="container">
+  <header>
+    <h1>Bienvenido a NutriTEC</h1>
+    <p>Tu socio en salud y nutrición</p>
+  </header>
+
+  <section class="hero">
+    <img src="https://www.ceupe.com/images/easyblog_articles/4305/b2ap3_large_profesion-de-nutricionista-clinico.jpg" alt="NutriTEC Hero Image">
+  </section>
+
+  <section #missionVision class="mission-vision" [@fadeInOnScroll]="missionVisionState">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Nuestra Misión</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ mission }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Nuestra Visión</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>{{ vision }}</p>
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  <section #process class="process" [@fadeInOnScroll]="processState">
+    <h2>Nuestro Proceso</h2>
+    <div class="process-steps">
+      <mat-card *ngFor="let step of processSteps; let i = index">
+        <mat-card-header>
+          <mat-card-title>Paso {{ i + 1 }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>{{ step }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+
+  <section class="image-section">
+    <img src="https://www.universidadviu.com/sites/universidadviu.com/files/images/salidas%20profesionales%20nutricion-min.jpg" alt="NutriTEC Professional Image">
+  </section>
+
+  <section #structure class="structure" [@fadeInOnScroll]="structureState">
+    <h2>Estructura Organizacional</h2>
+    <ul>
+      <li *ngFor="let dept of structureDepts">
+        <mat-icon>group</mat-icon>
+        <span>{{ dept }}</span>
+      </li>
+    </ul>
+  </section>
+
+  <footer>
+    <div class="contact-info">
+      <p><mat-icon>phone</mat-icon> 2222-2222</p>
+      <p><mat-icon>email</mat-icon> soporte&#64;nutriTEC.com</p>
+    </div>
+    <p>&copy; 2024 NutriTEC. Algunos derechos reservados.</p>
+  </footer>
+</div>

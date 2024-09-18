@@ -1,0 +1,156 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Roboto', sans-serif;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+header h1 {
+  color: #1e2c7a;
+  font-size: 4em;
+  text-shadow: 4px 4px 6px rgba(0,0,0,0.1);
+  font-weight: bold;
+  letter-spacing: 2.5px;
+  box-shadow: 4px 6px 10px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  background-color: #ffffff;
+  padding: 20px;
+  transition: transform 0.3s ease;
+}
+
+header h1:hover {
+  transform: scale(1.05);
+}
+
+header p {
+  color: #000000;
+  font-size: 1.8em;
+  letter-spacing: 2px;
+}
+
+.hero img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 40px;
+  transition: transform 0.3s ease;
+}
+
+.hero img:hover {
+  transform: scale(1.02);
+}
+
+.mission-vision {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.mission-vision mat-card {
+  width: 48%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mission-vision mat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.process h2, .structure h2 {
+  text-align: center;
+  color: #192530;
+  margin-bottom: 20px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+.process-steps {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.process-steps mat-card {
+  width: 18%;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.process-steps mat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.structure ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.structure li {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin: 10px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.structure li:hover {
+  transform: scale(1.05);
+  background-color: #2980b9;
+}
+
+.image-section img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 40px 0;
+  transition: transform 0.3s ease;
+}
+
+.image-section img:hover {
+  transform: scale(1.02);
+}
+
+footer {
+  background-color: #34495e;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.contact-info {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.contact-info p {
+  margin: 0 20px;
+  display: flex;
+  align-items: center;
+}
+
+.contact-info mat-icon {
+  margin-right: 5px;
+}
+
+@media (max-width: 768px) {
+  .mission-vision, .process-steps {
+    flex-direction: column;
+  }
+
+  .mission-vision mat-card, .process-steps mat-card {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
