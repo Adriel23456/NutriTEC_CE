@@ -121,10 +121,6 @@ export class EditDishComponent implements AfterViewInit, OnInit {
     }
   }
 
-  loadData() {
-    // Este método ya no es necesario, la carga de datos se hace en ngOnInit
-  }
-
   createFilter(): (data: any, filter: string) => boolean {
     return (data: ProductWithSelection, filter: string): boolean => {
       const searchString = JSON.parse(filter);

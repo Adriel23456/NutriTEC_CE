@@ -1,1 +1,31 @@
-<p>advice-client works!</p>
+<div class="toolbar">
+  <mat-form-field appearance="fill">
+    <mat-label>Filtrar por correo</mat-label>
+    <input matInput (input)="applyFilterEmail($event)" placeholder="Escribe para filtrar...">
+  </mat-form-field>
+</div>
+
+<h2 class="table-title">
+  Clientes
+</h2>
+
+<div class="table-container">
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <!-- Columna de selección -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>Seleccionar</th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="onSelectionChange($event, row)" [checked]="row.isSelected"></mat-checkbox>
+      </td>
+    </ng-container>
+    <!-- Columnas -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+      <td mat-cell *matCellDef="let row">{{ row.email }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-paginator [pageSize]="15" [pageSizeOptions]="[15, 30, 45]" showFirstLastButtons></mat-paginator>
+</div>

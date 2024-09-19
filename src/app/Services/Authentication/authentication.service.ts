@@ -93,8 +93,8 @@ export class AuthenticationService {
     return of(USERS.filter(user => user.e_domain === 'nutriTECAdmin.com'));
   }
 
-  // Metodo para obtener un admin por ID de la base de datos
-  getVetById(id: number): User | undefined {
+  // Metodo para obtener un user por ID de la base de datos
+  getUserById(id: number | undefined): User | undefined {
     return USERS.find(user => user.id === id);
   }
 }

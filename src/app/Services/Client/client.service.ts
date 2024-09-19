@@ -31,7 +31,13 @@ export class ClientService {
   private currentClientSubject: BehaviorSubject<Client | null>;
   public currentClient: Observable<Client | null>;
 
+  private clientsSubject = new BehaviorSubject<Client[]>(CLIENTS);
+  public clients$: Observable<Client[]> = this.clientsSubject.asObservable();
+
   constructor(private router: Router) {
+
+    this.clientsSubject.next(CLIENTS);
+
     const clientJson = localStorage.getItem('currentClient');
     this.currentClientSubject = new BehaviorSubject<Client | null>(clientJson ? JSON.parse(clientJson) : null);
     this.currentClient = this.currentClientSubject.asObservable();
@@ -44,6 +50,12 @@ export class ClientService {
   registerClient(client: Client): Observable<Client> {
     CLIENTS.push(client);
     return of(client);
+  }
+
+  fetchClients(): void {
+    // Aquí implementarías la lógica para recuperar los datos desde una API
+    // Por ahora, solo retransmitimos los datos estáticos
+    this.clientsSubject.next(CLIENTS);
   }
 
   saveClient(email: string): Observable<Client | null> {
