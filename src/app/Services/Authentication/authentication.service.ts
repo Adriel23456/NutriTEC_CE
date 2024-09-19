@@ -67,7 +67,7 @@ export class AuthenticationService {
       localStorage.setItem('currentDate', JSON.stringify(date));  // Guarda
     }
   }
-
+  
   registerUser(user: User): Observable<User> {
     USERS.push(user);
     return of(user);

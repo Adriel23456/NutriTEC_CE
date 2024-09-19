@@ -20,6 +20,8 @@ import { AdviceClientComponent } from './Components/NutritionistView/advice-clie
 import { ManageFoodPlanComponent } from './Components/NutritionistView/manage-food-plan/manage-food-plan.component';
 import { ManageDishProductComponent } from './Components/ClientView/manage-dish-product/manage-dish-product.component';
 import { ManageDishProductNutritionistComponent } from './Components/NutritionistView/manage-dish-product-nutritionist/manage-dish-product-nutritionist.component';
+import { GenerateProductComponent } from './Components/All/generate-product/generate-product.component';
+import { GenerateDishComponent } from './Components/All/generate-dish/generate-dish.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -37,6 +39,8 @@ export const routes: Routes = [
         { path: 'foodPlan', component: FoodPlanComponent },
         { path: 'dailyRegister', component: DailyRegisterComponent },
         { path: 'advancementReport', component: AdvancementReportComponent },
+        { path: 'generateProduct', component: GenerateProductComponent },
+        { path: 'generateDish', component: GenerateDishComponent }
       ]
     },
     {
@@ -59,7 +63,9 @@ export const routes: Routes = [
         { path: 'startInfoNutri', component: StartInfoNutritionistComponent },
         { path: 'manageDishProduct', component: ManageDishProductNutritionistComponent },
         { path: 'adviceClient', component: AdviceClientComponent },
-        { path: 'manageFoodPlan', component: ManageFoodPlanComponent }
+        { path: 'manageFoodPlan', component: ManageFoodPlanComponent },
+        { path: 'generateProduct', component: GenerateProductComponent },
+        { path: 'generateDish', component: GenerateDishComponent }
       ]
     },
     { path: '**', redirectTo: '/sidenavClient' }

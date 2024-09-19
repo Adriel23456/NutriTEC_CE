@@ -1,1 +1,55 @@
-<p>manage-dish-product-nutritionist works!</p>
+<div class="toolbar">
+  <button mat-raised-button color="primary" (click)="generateDishProduct()">Generar Producto o Platillo</button>
+  <mat-form-field appearance="fill">
+    <mat-label>Filtrar por nombre</mat-label>
+    <input matInput (input)="applyFilterName($event)" placeholder="Escribe para filtrar...">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Filtrar por código</mat-label>
+    <input matInput (input)="applyFilterCode($event)" placeholder="Escribe para filtrar...">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Filtrar por proteína</mat-label>
+    <input matInput (input)="applyFilterProtein($event)" placeholder="Escribe para filtrar...">
+  </mat-form-field>
+  <button mat-button (click)="switchView()">
+    {{ currentView === 'dishes' ? 'Ver Productos' : 'Ver Platillos' }}
+  </button>
+</div>
+
+<h2 class="table-title">
+  {{ currentView === 'dishes' ? 'Platillos Disponibles' : 'Productos Disponibles' }}
+</h2>
+
+<div class="table-container">
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <!-- Columnas -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+      <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="barCode">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Código de Barras</th>
+      <td mat-cell *matCellDef="let row">{{ row.barCode }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="protein">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Proteína (g)</th>
+      <td mat-cell *matCellDef="let row">{{ row.protein }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef>Editar</th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-icon-button color="accent" (click)="editItem(row)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-paginator [pageSize]="15" [pageSizeOptions]="[15, 30, 45]" showFirstLastButtons></mat-paginator>
+</div>
