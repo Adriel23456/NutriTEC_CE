@@ -6,7 +6,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
-import { AuthenticationService, User } from '../../../Services/Authentication/authentication.service';
 import { Router } from '@angular/router';
 import { DialogComponent } from '../../Authentication/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -60,7 +59,7 @@ export class GenerateProductComponent implements OnInit {
       
       // Crear instancia de Product
       const product: Product = {
-        barCode: 23135465465,
+        barCode: Math.floor(Math.random() * 1000000000),
         name: formData.name,
         description: formData.description,
         calcium: formData.calcium,

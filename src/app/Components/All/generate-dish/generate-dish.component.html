@@ -48,6 +48,10 @@
   <mat-paginator [pageSize]="15" [pageSizeOptions]="[15, 30, 45]" showFirstLastButtons></mat-paginator>
 </div>
 
+<h2 class="table-title">
+  Formulario del Platillo
+</h2>
+
 <div class="generateDish-container">
   <form [formGroup]="generateDishForm" (ngSubmit)="onSubmit()">
     <mat-form-field>

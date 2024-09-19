@@ -18,7 +18,6 @@ import {MatSortModule} from "@angular/material/sort";
 import {MatIconModule} from "@angular/material/icon";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 import {MatMomentDateModule} from "@angular/material-moment-adapter";
-import { D } from '@angular/cdk/keycodes';
 
 interface ProductWithSelection extends Product {
   isSelected: boolean;

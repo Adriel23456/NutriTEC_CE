@@ -55,4 +55,18 @@ export class ProductService {
     PRODUCTS.push(product);
     return of(product);
   }
+
+  // Método para actualizar un producto existente
+  updateProduct(updatedProduct: Product): void {
+    const index = PRODUCTS.findIndex(product => product.barCode === updatedProduct.barCode);
+    if (index !== -1) {
+      PRODUCTS[index] = updatedProduct;
+      this.productsSubject.next(PRODUCTS); // Emitimos el cambio
+    }
+  }
+
+  // Método para obtener un producto por su barCode
+  getProductByBarCode(barCode: number): Product | undefined {
+    return PRODUCTS.find(product => product.barCode === barCode);
+  }
 }

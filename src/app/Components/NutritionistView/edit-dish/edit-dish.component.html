@@ -1,1 +1,78 @@
-<p>edit-dish works!</p>
+<div class="toolbar">
+  <button class="return-button" (click)="onReturn()">Regresar</button>
+  <mat-form-field appearance="fill">
+    <mat-label>Filtrar por nombre</mat-label>
+    <input matInput (input)="applyFilterName($event)" placeholder="Escribe para filtrar...">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Filtrar por código</mat-label>
+    <input matInput (input)="applyFilterCode($event)" placeholder="Escribe para filtrar...">
+  </mat-form-field>
+</div>
+
+<h2 class="table-title">
+  Productos disponibles
+</h2>
+
+<div class="table-container">
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <!-- Columna de selección -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>Seleccionar</th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (change)="onSelectionChange(row)" [checked]="row.isSelected"></mat-checkbox>
+      </td>
+    </ng-container>
+    <!-- Columnas -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+      <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="barCode">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Código de Barras</th>
+      <td mat-cell *matCellDef="let row">{{ row.barCode }}</td>
+    </ng-container>
+
+    <!-- Columna de cantidad -->
+    <ng-container matColumnDef="quantity">
+      <th mat-header-cell *matHeaderCellDef>Cantidad por servida (g/ml)</th>
+      <td mat-cell *matCellDef="let row">
+        <input matInput type="number" [disabled]="!row.isSelected" (input)="onQuantityChange(row, $event)" [value]="row.quantity">
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-paginator [pageSize]="15" [pageSizeOptions]="[15, 30, 45]" showFirstLastButtons></mat-paginator>
+</div>
+
+<h2 class="table-title">
+  Formulario del Platillo por Editar
+</h2>
+
+<div class="updateDish-container">
+  <form [formGroup]="updateDishForm" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+        <h3>Código de barras</h3>
+        <input matInput formControlName="barCode">
+    </mat-form-field>
+
+    <mat-form-field>
+        <h3>Nombre del platillo</h3>
+      <input matInput placeholder="Nombre" formControlName="name" required>
+      <mat-error *ngIf="updateDishForm.get('name')?.hasError('required')">Este campo es obligatorio</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <h3>Descripción del platillo</h3>
+        <input matInput placeholder="Descripción" formControlName="description" required>
+        <mat-error *ngIf="updateDishForm.get('description')?.hasError('required')">Este campo es obligatorio</mat-error>
+    </mat-form-field>
+
+    <div class="button-container">
+      <button mat-raised-button color="primary" type="submit">Actualizar el platillo</button>
+    </div>
+  </form>
+</div>

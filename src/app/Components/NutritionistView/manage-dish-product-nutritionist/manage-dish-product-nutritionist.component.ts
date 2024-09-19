@@ -12,8 +12,6 @@ import {MatDialog} from "@angular/material/dialog";
 import {Router} from "@angular/router";
 import {Dish, DishService} from "../../../Services/All/dish.service";
 import {Product, ProductService} from "../../../Services/All/product.service";
-import { EditDishComponent } from '../edit-dish/edit-dish.component';
-import { EditProductComponent } from '../edit-product/edit-product.component';
 import { DialogGenerateDishProductComponent } from '../dialog-generate-dish-product/dialog-generate-dish-product.component';
 
 @Component({
@@ -41,7 +39,7 @@ export class ManageDishProductNutritionistComponent implements AfterViewInit {
   dataSource = new MatTableDataSource<any>(); // Puede contener Dish o Product
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  currentView: 'dishes' | 'products' = 'dishes'; // Variable para controlar la vista actual
+  currentView: 'dishes' | 'products' = 'products'; // Variable para controlar la vista actual
 
   constructor(
     private dialog: MatDialog,
@@ -63,7 +61,7 @@ export class ManageDishProductNutritionistComponent implements AfterViewInit {
       this.productService.products$.subscribe(products => {
         this.dataSource.data = products;
       });
-      this.productService.fetchProducts(); // Asegúrate de tener esta función en el servicio
+      this.productService.fetchProducts();
     }
   }
 

@@ -6,51 +6,61 @@
   
   <form [formGroup]="generateProductForm" (ngSubmit)="onSubmit()">
     <mat-form-field>
+      <h3>Nombre del producto</h3>
       <input matInput placeholder="Nombre" formControlName="name" required>
       <mat-error *ngIf="generateProductForm.get('name')?.hasError('required')">Este campo es obligatorio</mat-error>
     </mat-form-field>
 
     <mat-form-field>
+        <h3>Descripción del producto</h3>
         <input matInput placeholder="Descripción" formControlName="description" required>
         <mat-error *ngIf="generateProductForm.get('description')?.hasError('required')">Este campo es obligatorio</mat-error>
     </mat-form-field>
 
     <mat-form-field>
+        <h3>Contenido de calcio (mg)</h3>
         <input matInput placeholder="Calcio (mg)" formControlName="calcium" type="number" required>
         <mat-error *ngIf="generateProductForm.get('calcium')?.hasError('required')">Este campo es obligatorio</mat-error>
     </mat-form-field>
 
     <mat-form-field>
+        <h3>Contenido de sodio (mg)</h3>
         <input matInput placeholder="Sodio (mg)" formControlName="sodium" type="number" required>
         <mat-error *ngIf="generateProductForm.get('sodium')?.hasError('required')">Este campo es obligatorio</mat-error>
     </mat-form-field>
 
     <mat-form-field>
+        <h3>Contenido de grasa (g)</h3>
         <input matInput placeholder="Grasa (g)" formControlName="fat" type="number" required>
         <mat-error *ngIf="generateProductForm.get('fat')?.hasError('required')">Este campo es obligatorio</mat-error>
     </mat-form-field>
 
     <mat-form-field>
+        <h3>Valor energético (Kcal)</h3>
         <input matInput placeholder="Energía (Kcal)" formControlName="energy" type="number" required>
         <mat-error *ngIf="generateProductForm.get('energy')?.hasError('required')">Este campo es obligatorio</mat-error>
     </mat-form-field>
 
     <mat-form-field>
+        <h3>Tamaño de la porción (g/ml)</h3>
         <input matInput placeholder="Cantidad por servida (g/ml)" formControlName="servingSize" type="number" required>
         <mat-error *ngIf="generateProductForm.get('servingSize')?.hasError('required')">Este campo es obligatorio</mat-error>
     </mat-form-field>
 
     <mat-form-field>
+        <h3>Contenido de hierro (mg)</h3>
         <input matInput placeholder="Hierro (mg)" formControlName="iron" type="number" required>
         <mat-error *ngIf="generateProductForm.get('iron')?.hasError('required')">Este campo es obligatorio</mat-error>
     </mat-form-field>
 
     <mat-form-field>
+        <h3>Contenido de proteína (g)</h3>
         <input matInput placeholder="Proteina (g)" formControlName="protein" type="number" required>
         <mat-error *ngIf="generateProductForm.get('protein')?.hasError('required')">Este campo es obligatorio</mat-error>
     </mat-form-field>
 
     <mat-form-field>
+        <h3>Contenido de carbohidratos (g)</h3>
         <input matInput placeholder="Carbohidratos (g)" formControlName="carbohydrates" type="number" required>
         <mat-error *ngIf="generateProductForm.get('carbohydrates')?.hasError('required')">Este campo es obligatorio</mat-error>
     </mat-form-field>

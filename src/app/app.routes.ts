@@ -22,6 +22,8 @@ import { ManageDishProductComponent } from './Components/ClientView/manage-dish-
 import { ManageDishProductNutritionistComponent } from './Components/NutritionistView/manage-dish-product-nutritionist/manage-dish-product-nutritionist.component';
 import { GenerateProductComponent } from './Components/All/generate-product/generate-product.component';
 import { GenerateDishComponent } from './Components/All/generate-dish/generate-dish.component';
+import { EditProductComponent } from './Components/NutritionistView/edit-product/edit-product.component';
+import { EditDishComponent } from './Components/NutritionistView/edit-dish/edit-dish.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -65,7 +67,9 @@ export const routes: Routes = [
         { path: 'adviceClient', component: AdviceClientComponent },
         { path: 'manageFoodPlan', component: ManageFoodPlanComponent },
         { path: 'generateProduct', component: GenerateProductComponent },
-        { path: 'generateDish', component: GenerateDishComponent }
+        { path: 'generateDish', component: GenerateDishComponent },
+        { path: 'manageDishProduct/editProduct/:barCode', component: EditProductComponent },
+        { path: 'manageDishProduct/editDish/:barCode', component: EditDishComponent },
       ]
     },
     { path: '**', redirectTo: '/sidenavClient' }
