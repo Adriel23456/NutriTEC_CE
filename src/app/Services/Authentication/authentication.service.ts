@@ -1,6 +1,8 @@
-import { inject, Injectable } from '@angular/core';
-import { Observable, of, BehaviorSubject } from 'rxjs';
-import {Router} from "@angular/router";
+import { Injectable } from '@angular/core';
+import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Router } from "@angular/router";
+import { tap, map, catchError } from 'rxjs/operators';
+import { ComunicationService } from '../All/comunication.service';
 
 export interface User {
   id: number;
@@ -20,18 +22,6 @@ export interface User {
   username: string;
 }
 
-const USERS: User[] = [
-  { id:118500811, age:22, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves@nutriTECAdmin.com', e_identifier: 'adriel.chaves', e_domain: 'nutriTECAdmin.com', fullname: 'Adriel Sebstian Chaves Salazar', name: 'Adriel Sebastian', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adrielAdmin' },
-  { id:128520812, age:23, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves444@nutriTECAdmin.com', e_identifier: 'adriel.chaves444', e_domain: 'nutriTECAdmin.com', fullname: 'Adriel Sebstian Chaves Salazar', name: 'Adriel Sebastian', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adriel23456' },
-  { id:128520813, age:24, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves555@nutriTECAdmin.com', e_identifier: 'adriel.chaves555', e_domain: 'nutriTECAdmin.com', fullname: 'Adriel Sebstian Chaves Salazar', name: 'Adriel Sebastian', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adriel23456' },
-  { id:118525814, age:20, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves23@nutriTECNutri.com', e_identifier: 'adriel.chaves23', e_domain: 'nutriTECNutri.com', fullname: 'Adriel Seb Chaves Salazar', name: 'Adriel Seb', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adrielNutri' },
-  { id:118525815, age:25, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves666@nutriTECNutri.com', e_identifier: 'adriel.chaves666', e_domain: 'nutriTECNutri.com', fullname: 'Adriel Seb Chaves Salazar', name: 'Adriel Seb', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adriel23456' },
-  { id:118525816, age:26, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves777@nutriTECNutri.com', e_identifier: 'adriel.chaves777', e_domain: 'nutriTECNutri.com', fullname: 'Adriel Seb Chaves Salazar', name: 'Adriel Seb', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adriel23456' },
-  { id:118533817, age:18, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves23456@hotmail.com', e_identifier: 'adriel.chaves23456', e_domain: 'hotmail.com', fullname: 'Adriel S Chaves Salazar', name: 'Adriel S', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adrielClient' },
-  { id:118533818, age:27, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves888@hotmail.com', e_identifier: 'adriel.chaves888', e_domain: 'hotmail.com', fullname: 'Adriel S Chaves Salazar', name: 'Adriel S', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adriel23456' },
-  { id:118533819, age:28, password: '1234', birthdate: '08/09/2002', b_day: 8, b_month: 9, b_year: 2002,  email: 'adriel.chaves999@hotmail.com', e_identifier: 'adriel.chaves999', e_domain: 'hotmail.com', fullname: 'Adriel S Chaves Salazar', name: 'Adriel S', firstlastName: 'Chaves', secondlastName: 'Salazar', username: 'adriel23456' }
-];
-
 @Injectable({
   providedIn: 'root'
 })
@@ -39,67 +29,126 @@ export class AuthenticationService {
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
 
-  private currentDateSubject: BehaviorSubject<string | null>;
-  public currentDate: Observable<string | null>;
+  private usersSubject: BehaviorSubject<User[]>;
+  public users$: Observable<User[]>;
 
-  private usersSubject = new BehaviorSubject<User[]>(USERS);
-  public users$: Observable<User[]> = this.usersSubject.asObservable();
-
-  constructor(private router: Router) {
-    this.usersSubject.next(USERS);
-
+  constructor(
+    private router: Router,
+    private comunicationService: ComunicationService
+  ) {
+    // Inicializa el BehaviorSubject para el usuario actual
     const userJson = localStorage.getItem('currentUser');
     this.currentUserSubject = new BehaviorSubject<User | null>(userJson ? JSON.parse(userJson) : null);
     this.currentUser = this.currentUserSubject.asObservable();
 
-    const dateJson = localStorage.getItem('currentDate');
-    this.currentDateSubject = new BehaviorSubject<string | null>(dateJson ? JSON.parse(dateJson) : null);
-    this.currentDate = this.currentDateSubject.asObservable();
+    // Inicializa el BehaviorSubject para la lista de usuarios
+    this.usersSubject = new BehaviorSubject<User[]>([]);
+    this.users$ = this.usersSubject.asObservable();
+
+    // Carga inicial de usuarios desde la API
+    this.loadUsers();
   }
 
+  /**
+   * Obtiene el usuario actualmente autenticado.
+   */
   public get currentUserValue(): User | null {
     return this.currentUserSubject.value;
   }
-  public get currentDateValue(): string | null {
-    return this.currentDateSubject.value;
+
+  /**
+   * Carga todos los usuarios desde la API y actualiza el BehaviorSubject.
+   */
+  private loadUsers(): void {
+    this.comunicationService.getUsers().pipe(
+      tap(users => {
+        this.usersSubject.next(users);
+      }),
+      catchError(error => {
+        console.error('Error al cargar usuarios:', error);
+        this.usersSubject.next([]);
+        return of([]);
+      })
+    ).subscribe();
   }
 
-  setDateValue(date: string | null) {
-    this.currentDateSubject.next(date);
-    if (date === null) {
-      localStorage.removeItem('currentDate');  // Borra la entrada
-    } else {
-      localStorage.setItem('currentDate', JSON.stringify(date));  // Guarda
-    }
-  }
-  
-  registerUser(user: User): Observable<User> {
-    USERS.push(user);
-    return of(user);
+  /**
+   * Registra un nuevo usuario a través de la API.
+   * @param user Objeto de usuario a registrar (sin id).
+   * @returns Observable con el usuario creado.
+   */
+  registerUser(user: Omit<User, 'id'>): Observable<User> {
+    return this.comunicationService.createUser(user as User).pipe(
+      tap(newUser => {
+        // Actualiza la lista local de usuarios
+        const currentUsers = this.usersSubject.value;
+        this.usersSubject.next([...currentUsers, newUser]);
+      }),
+      catchError(error => {
+        console.error('Error al registrar el usuario:', error);
+        throw error;
+      })
+    );
   }
 
+  /**
+   * Inicia sesión autenticando al usuario a través de la API.
+   * @param email Correo electrónico del usuario.
+   * @param password Contraseña del usuario.
+   * @returns Observable con el usuario autenticado o null si falla.
+   */
   login(email: string, password: string): Observable<User | null> {
-    const user = USERS.find(u => u.email === email && u.password === password); //Esto sera reemplazado por la base de datos...
-    if (user) {
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      this.currentUserSubject.next(user);
-      return of(user);
-    }
-    return of(null);
+    return this.comunicationService.getUsers().pipe(
+      map(users => users.find(u => u.email === email && u.password === password) || null),
+      tap(user => {
+        if (user) {
+          // Guarda el usuario en localStorage
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          this.currentUserSubject.next(user);
+        }
+      }),
+      catchError(error => {
+        console.error('Error al iniciar sesión:', error);
+        return of(null);
+      })
+    );
   }
 
+  /**
+   * Cierra la sesión del usuario actual.
+   */
   logout(): void {
+    // Elimina el usuario del almacenamiento local
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
     this.router.navigate(['/login']);
   }
 
+  /**
+   * Obtiene todos los administradores filtrando los usuarios con e_domain === 'nutriTECAdmin.com'.
+   * @returns Observable con la lista de administradores.
+   */
   getAdmins(): Observable<User[]> {
-    return of(USERS.filter(user => user.e_domain === 'nutriTECAdmin.com'));
+    return this.users$.pipe(
+      map(users => users.filter(user => user.e_domain === 'nutriTECAdmin.com')),
+      catchError(error => {
+        console.error('Error al obtener administradores:', error);
+        return of([]);
+      })
+    );
   }
 
-  // Metodo para obtener un user por ID de la base de datos
-  getUserById(id: number | undefined): User | undefined {
-    return USERS.find(user => user.id === id);
+  /**
+   * Obtiene un usuario específico por su Id a través de la API.
+   * @param id Identificador único del usuario.
+   * @returns Observable con el usuario solicitado o undefined si no se encuentra.
+   */
+  getUserById(id: number): Observable<User | undefined> {
+    return this.comunicationService.getUserById(id).pipe(
+      catchError(error => {
+        console.error(`Error al obtener el usuario con id ${id}:`, error);
+        return of(undefined);
+      })
+    );
   }
 }

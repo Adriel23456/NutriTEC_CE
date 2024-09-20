@@ -85,7 +85,7 @@ export class GenerateDishComponent implements AfterViewInit {
       }));
       this.dataSource.data = this.products;
     });
-    this.productService.fetchProducts();
+    this.productService.loadProducts();
   }
 
   createFilter(): (data: any, filter: string) => boolean {

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable, of} from "rxjs";
+import { BehaviorSubject, Observable, of, throwError } from "rxjs";
+import { ComunicationService } from '../All/comunication.service';
+import { catchError, tap, map } from 'rxjs/operators';
 
 export interface Product {
   barCode: number;
@@ -16,57 +18,104 @@ export interface Product {
   status: string;
 }
 
-const PRODUCTS: Product[] = [
-  { barCode: 11223344, name: 'Manzana', description: 'Fruta natural clásica', calcium: 50, sodium: 50, fat: 50, energy: 50, servingSize: 150, iron: 50, protein: 50, carbohydrates: 50, status: 'Approved' },
-  { barCode: 22334455, name: 'Banana', description: 'Fruta tropical rica en potasio', calcium: 5, sodium: 1, fat: 0, energy: 89, servingSize: 120, iron: 0.3, protein: 1.1, carbohydrates: 23, status: 'Requested' },
-  { barCode: 33445566, name: 'Leche', description: 'Leche entera de vaca', calcium: 125, sodium: 50, fat: 8, energy: 150, servingSize: 250, iron: 0.1, protein: 8, carbohydrates: 12, status: 'Approved' },
-  { barCode: 44556677, name: 'Pan Integral', description: 'Pan hecho con harina integral', calcium: 30, sodium: 170, fat: 2, energy: 110, servingSize: 40, iron: 1.5, protein: 4, carbohydrates: 20, status: 'Approved' },
-  { barCode: 55667788, name: 'Queso', description: 'Queso cheddar', calcium: 200, sodium: 600, fat: 33, energy: 402, servingSize: 100, iron: 0.7, protein: 25, carbohydrates: 1.3, status: 'Approved' },
-  { barCode: 66778899, name: 'Yogur', description: 'Yogur natural sin azúcar', calcium: 110, sodium: 70, fat: 4, energy: 59, servingSize: 100, iron: 0.1, protein: 10, carbohydrates: 3.6, status: 'Requested' },
-  { barCode: 77889900, name: 'Arroz', description: 'Arroz blanco', calcium: 10, sodium: 1, fat: 0.3, energy: 130, servingSize: 100, iron: 1.2, protein: 2.7, carbohydrates: 28, status: 'Requested' },
-  { barCode: 88990011, name: 'Pollo', description: 'Pechuga de pollo sin piel', calcium: 11, sodium: 74, fat: 3.6, energy: 165, servingSize: 100, iron: 0.9, protein: 31, carbohydrates: 0, status: 'Approved' },
-  { barCode: 99001122, name: 'Espinaca', description: 'Vegetal de hoja verde', calcium: 99, sodium: 79, fat: 0.4, energy: 23, servingSize: 100, iron: 2.7, protein: 2.9, carbohydrates: 3.6, status: 'Requested' },
-];
-
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
-  private productsSubject = new BehaviorSubject<Product[]>(PRODUCTS);
+  private productsSubject = new BehaviorSubject<Product[]>([]);
   public products$: Observable<Product[]> = this.productsSubject.asObservable();
 
-  constructor() {
-    this.productsSubject.next(PRODUCTS);
+  constructor(private communicationService: ComunicationService) {
+    this.loadProducts();
   }
 
-  fetchProducts(): void {
-    // Aquí implementarías la lógica para recuperar las citas desde una API
-    // Por ahora, solo retransmitimos los datos estáticos
-    this.productsSubject.next(PRODUCTS);
+  /**
+   * Carga todos los productos desde la API y actualiza el BehaviorSubject.
+   */
+  public loadProducts(): void {
+    this.communicationService.getProducts().pipe(
+      tap(products => this.productsSubject.next(products)),
+      catchError(error => {
+        console.error('Error al cargar productos:', error);
+        this.productsSubject.next([]);
+        return throwError(() => error);
+      })
+    ).subscribe();
   }
 
-  refreshData(): void {
-    // Aquí implementarías la lógica para recuperar las citas desde una API
-    // Por ahora, solo retransmitimos los datos estáticos
-    this.productsSubject.next(PRODUCTS);
-  }
-
+  /**
+   * Registra un nuevo producto a través de la API.
+   * @param product Objeto de producto a registrar.
+   * @returns Observable con el producto creado.
+   */
   registerProduct(product: Product): Observable<Product> {
-    PRODUCTS.push(product);
-    return of(product);
+    return this.communicationService.createProduct(product).pipe(
+      tap(newProduct => {
+        const currentProducts = this.productsSubject.value;
+        this.productsSubject.next([...currentProducts, newProduct]);
+      }),
+      catchError(error => {
+        console.error('Error al registrar el producto:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  // Método para actualizar un producto existente
-  updateProduct(updatedProduct: Product): void {
-    const index = PRODUCTS.findIndex(product => product.barCode === updatedProduct.barCode);
-    if (index !== -1) {
-      PRODUCTS[index] = updatedProduct;
-      this.productsSubject.next(PRODUCTS); // Emitimos el cambio
-    }
+  /**
+   * Actualiza un producto existente a través de la API.
+   * @param updatedProduct Objeto de producto actualizado.
+   * @returns Observable con el producto actualizado.
+   */
+  updateProduct(updatedProduct: Product): Observable<Product> {
+    return this.communicationService.updateProduct(updatedProduct.barCode, updatedProduct).pipe(
+      tap(() => {
+        const products = this.productsSubject.value;
+        const index = products.findIndex(p => p.barCode === updatedProduct.barCode);
+        if (index !== -1) {
+          products[index] = updatedProduct;
+          this.productsSubject.next([...products]);
+        }
+      }),
+      map(() => updatedProduct),
+      catchError(error => {
+        console.error('Error al actualizar el producto:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  // Método para obtener un producto por su barCode
-  getProductByBarCode(barCode: number): Product | undefined {
-    return PRODUCTS.find(product => product.barCode === barCode);
+  /**
+   * Obtiene un producto por su barCode desde la API.
+   * @param barCode Código de barras único del producto.
+   * @returns Observable con el producto solicitado o null si no se encuentra.
+   */
+  getProductByBarCode(barCode: number): Observable<Product | null> {
+    return this.communicationService.getProductByBarCode(barCode).pipe(
+      tap(product => {
+        if (product) {
+          const products = this.productsSubject.value;
+          const index = products.findIndex(p => p.barCode === barCode);
+          if (index === -1) {
+            this.productsSubject.next([...products, product]);
+          } else {
+            products[index] = product;
+            this.productsSubject.next([...products]);
+          }
+        }
+      }),
+      map(product => product || null),
+      catchError(error => {
+        console.error('Error al obtener el producto:', error);
+        return of(null);
+      })
+    );
+  }
+
+  /**
+   * Obtiene todos los productos como Observable.
+   * @returns Observable con la lista de productos.
+   */
+  getProducts(): Observable<Product[]> {
+    return this.products$;
   }
 }

@@ -56,12 +56,12 @@ export class ManageDishProductNutritionistComponent implements AfterViewInit {
       this.dishService.dishes$.subscribe(dishes => {
         this.dataSource.data = dishes;
       });
-      this.dishService.fetchDishes();
+      this.dishService.loadDishes();
     } else {
       this.productService.products$.subscribe(products => {
         this.dataSource.data = products;
       });
-      this.productService.fetchProducts();
+      this.productService.loadProducts();
     }
   }
 

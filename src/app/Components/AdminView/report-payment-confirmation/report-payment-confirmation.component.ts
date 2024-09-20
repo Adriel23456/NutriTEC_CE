@@ -59,15 +59,22 @@ export class ReportPaymentConfirmationComponent implements OnInit {
   }
 
   loadNutritionistData(): void {
-    this.nutritionist = this.nutritionistService.getNutritionistById(this.id);
-    if (this.nutritionist) {
-      this.calculatePayment();
-      this.updateForm();
-    } else {
-      console.error('Nutricionista no encontrado');
-      // Manejar el caso cuando no se encuentra el nutricionista
-    }
-  }
+    this.nutritionistService.getNutritionistById(this.id).subscribe(
+      (nutritionist) => {
+        this.nutritionist = nutritionist;
+        if (nutritionist) {
+          this.calculatePayment();
+          this.updateForm();
+        } else {
+          console.error('Nutricionista no encontrado');
+          // Manejar el caso cuando no se encuentra el nutricionista
+        }
+      },
+      (error) => {
+        console.error('Error al obtener el nutricionista:', error);
+      }
+    );
+  }  
 
   calculatePayment(): void {
     if (this.nutritionist) {
@@ -95,17 +102,31 @@ export class ReportPaymentConfirmationComponent implements OnInit {
   }
 
   updateForm(): void {
-    if (this.nutritionist) {
-      this.paymentForm.patchValue({
-        fullName: this.authService.getUserById(this.id)?.fullname, // Asumiendo que el nombre está en la parte del email antes del @
-        paymentCard: this.nutritionist.paymentCard,
-        totalPaymentAmount: this.nutritionist.totalPaymentAmount,
-        discount: this.nutritionist.discount,
-        finalPayment: this.nutritionist.finalPayment
-      });
+    if (this.nutritionist && this.id !== undefined && !isNaN(this.id)) {
+      this.authService.getUserById(this.id).subscribe(
+        (user) => {
+          this.paymentForm.patchValue({
+            fullName: user?.fullname || '',
+            paymentCard: this.nutritionist?.paymentCard || '',
+            totalPaymentAmount: this.nutritionist?.totalPaymentAmount || 0,
+            discount: this.nutritionist?.discount || 0,
+            finalPayment: this.nutritionist?.finalPayment || 0
+          });
+        },
+        (error) => {
+          console.error('Error al obtener el usuario:', error);
+          this.paymentForm.patchValue({
+            fullName: '',
+            paymentCard: this.nutritionist?.paymentCard || '',
+            totalPaymentAmount: this.nutritionist?.totalPaymentAmount || 0,
+            discount: this.nutritionist?.discount || 0,
+            finalPayment: this.nutritionist?.finalPayment || 0
+          });
+        }
+      );
     }
-  }
-
+  }  
+  
   onSubmit(): void {
     if (this.paymentForm.valid && this.nutritionist) {
       // Generar y descargar el PDF
@@ -148,5 +169,4 @@ export class ReportPaymentConfirmationComponent implements OnInit {
     // Descargar el PDF
     doc.save('ReporteCobroNutricionista.pdf');
   }
-  
 }

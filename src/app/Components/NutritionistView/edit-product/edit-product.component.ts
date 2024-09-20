@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DialogComponent } from '../../Authentication/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductService, Product } from '../../../Services/All/product.service';
+import { catchError, of } from 'rxjs';
 
 @Component({
   selector: 'app-edit-product',
@@ -55,27 +56,43 @@ export class EditProductComponent implements OnInit {
 
   ngOnInit(): void {
     // Obtener el barCode de los parámetros de ruta
-    this.barCode = Number(this.route.snapshot.paramMap.get('barCode'));
-    // Cargar el producto
-    const product = this.productService.getProductByBarCode(this.barCode);
-    if (product) {
-      // Rellenar el formulario con los datos del producto
-      this.editProductForm.patchValue({
-        barCode: product.barCode,
-        name: product.name,
-        description: product.description,
-        calcium: product.calcium,
-        sodium: product.sodium,
-        fat: product.fat,
-        energy: product.energy,
-        servingSize: product.servingSize,
-        iron: product.iron,
-        protein: product.protein,
-        carbohydrates: product.carbohydrates
+    const barCodeParam = this.route.snapshot.paramMap.get('barCode');
+    this.barCode = barCodeParam ? Number(barCodeParam) : undefined;
+
+    if (this.barCode !== undefined && !isNaN(this.barCode)) {
+      // Llamar al servicio para obtener el producto
+      this.productService.getProductByBarCode(this.barCode).pipe(
+        catchError(error => {
+          console.error('Error al obtener el producto:', error);
+          this.openDialog('Error', 'Ocurrió un error al obtener el producto.');
+          this.router.navigate(['/sidenavNutri/manageDishProduct']);
+          return of(null); // Retorna null en caso de error
+        })
+      ).subscribe((product: Product | null) => {
+        if (product) {
+          // Rellenar el formulario con los datos del producto
+          this.editProductForm.patchValue({
+            barCode: product.barCode,
+            name: product.name,
+            description: product.description,
+            calcium: product.calcium,
+            sodium: product.sodium,
+            fat: product.fat,
+            energy: product.energy,
+            servingSize: product.servingSize,
+            iron: product.iron,
+            protein: product.protein,
+            carbohydrates: product.carbohydrates
+          });
+        } else {
+          // Manejar el caso donde el producto no se encuentra
+          this.openDialog('Error', 'El producto no fue encontrado.');
+          this.router.navigate(['/sidenavNutri/manageDishProduct']);
+        }
       });
     } else {
-      // Manejar el caso donde el producto no se encuentra
-      this.openDialog('Error', 'El producto no fue encontrado.');
+      // Manejar el caso donde el barCode no es válido
+      this.openDialog('Error', 'Código de barras inválido.');
       this.router.navigate(['/sidenavNutri/manageDishProduct']);
     }
   }

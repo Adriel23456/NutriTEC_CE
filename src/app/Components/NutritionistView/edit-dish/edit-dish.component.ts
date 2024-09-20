@@ -18,6 +18,8 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatIconModule } from "@angular/material/icon";
 import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
+import { catchError, map } from 'rxjs/operators';
+import { of, throwError } from 'rxjs';
 
 interface ProductWithSelection extends Product {
   isSelected: boolean;
@@ -78,45 +80,64 @@ export class EditDishComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     // Obtener el barCode de los parámetros de ruta
-    this.barCode = Number(this.route.snapshot.paramMap.get('barCode'));
+    const barCodeParam = this.route.snapshot.paramMap.get('barCode');
+    this.barCode = barCodeParam ? Number(barCodeParam) : undefined;
 
-    // Cargar el platillo
-    const dish = this.dishService.getDishByBarCode(this.barCode);
-    if (dish) {
-      // Rellenar el formulario con los datos del platillo
-      this.updateDishForm.patchValue({
-        barCode: dish.barCode,
-        name: dish.name,
-        description: dish.description
-      });
+    if (this.barCode !== undefined && !isNaN(this.barCode)) {
+      // Llamar al servicio para obtener el plato
+      this.dishService.getDishByBarCode(this.barCode).pipe(
+        catchError(error => {
+          console.error('Error al obtener el plato:', error);
+          this.openDialog('Error', 'Ocurrió un error al obtener el plato.');
+          this.router.navigate(['/sidenavNutri/manageDishProduct']);
+          return of(null); // Retorna null en caso de error
+        })
+      ).subscribe((dish: Dish | null) => {
+        if (dish) {
+          // Rellenar el formulario con los datos del plato
+          this.updateDishForm.patchValue({
+            barCode: dish.barCode,
+            name: dish.name,
+            description: dish.description
+          });
 
-      // Cargar los productos
-      this.productService.products$.subscribe(products => {
-        this.products = products.map(product => ({
-          ...product,
-          isSelected: false,
-          quantity: null
-        }));
+          // Cargar los productos
+          this.productService.getProducts().pipe(
+            catchError(error => {
+              console.error('Error al cargar productos:', error);
+              this.openDialog('Error', 'Ocurrió un error al cargar los productos.');
+              return of([]); // Retorna un arreglo vacío en caso de error
+            })
+          ).subscribe((products: any[]) => {
+            this.products = products.map(product => ({
+              ...product,
+              isSelected: false,
+              quantity: null
+            }));
 
-        // Si el platillo tiene productos asociados, preseleccionarlos
-        if (dish.products) {
-          for (const dishProduct of dish.products) {
-            const productInList = this.products.find(p => p.barCode === dishProduct.product.barCode);
-            if (productInList) {
-              productInList.isSelected = true;
-              productInList.quantity = dishProduct.quantity;
-              this.selectedProducts.push(productInList);
+            // Si el platillo tiene productos asociados, preseleccionarlos
+            if (dish.products) {
+              for (const dishProduct of dish.products) {
+                const productInList = this.products.find(p => p.barCode === dishProduct.product.barCode);
+                if (productInList) {
+                  productInList.isSelected = true;
+                  productInList.quantity = dishProduct.quantity;
+                  this.selectedProducts.push(productInList);
+                }
+              }
             }
-          }
+
+            this.dataSource.data = this.products;
+          });
+        } else {
+          // Manejar el caso donde el plato no se encuentra
+          this.openDialog('Error', 'El platillo no fue encontrado.');
+          this.router.navigate(['/sidenavNutri/manageDishProduct']);
         }
-
-        this.dataSource.data = this.products;
       });
-
-      this.productService.fetchProducts();
     } else {
-      // Manejar el caso donde el platillo no se encuentra
-      this.openDialog('Error', 'El platillo no fue encontrado.');
+      // Manejar el caso donde el barCode no es válido
+      this.openDialog('Error', 'Código de barras inválido.');
       this.router.navigate(['/sidenavNutri/manageDishProduct']);
     }
   }

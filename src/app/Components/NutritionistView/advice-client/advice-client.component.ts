@@ -74,7 +74,22 @@ export class AdviceClientComponent implements AfterViewInit, OnInit {
     this.id = this.authService.currentUserValue?.id;
 
     // Cargar el nutricionista
-    this.nutritionist = this.nutritionistService.getNutritionistById(this.id);
+    if (this.id !== undefined && this.id !== null) {
+      this.nutritionistService.getNutritionistById(this.id).subscribe(
+        (nutritionist) => {
+          this.nutritionist = nutritionist;
+          // Puedes realizar otras acciones aquí, como manejar el caso donde nutritionist es undefined
+          if (!nutritionist) {
+            console.warn('Nutricionista no encontrado.');
+          }
+        },
+        (error) => {
+          console.error('Error al obtener el nutricionista:', error);
+        }
+      );
+    } else {
+      console.error('ID de nutricionista no proporcionado.');
+    }
     if (this.nutritionist) {
       // Cargar los clientes
       this.clientService.clients$.subscribe(clients => {
@@ -95,7 +110,7 @@ export class AdviceClientComponent implements AfterViewInit, OnInit {
 
         this.dataSource.data = this.clients;
       });
-      this.clientService.fetchClients();
+      this.clientService.loadClients();
     } else {
       // Manejar el caso donde el nutricionista no se encuentra
       this.openDialog('Error', 'El nutricionista no fue encontrado.');
