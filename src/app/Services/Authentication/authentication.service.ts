@@ -42,7 +42,12 @@ export class AuthenticationService {
   private currentDateSubject: BehaviorSubject<string | null>;
   public currentDate: Observable<string | null>;
 
+  private usersSubject = new BehaviorSubject<User[]>(USERS);
+  public users$: Observable<User[]> = this.usersSubject.asObservable();
+
   constructor(private router: Router) {
+    this.usersSubject.next(USERS);
+
     const userJson = localStorage.getItem('currentUser');
     this.currentUserSubject = new BehaviorSubject<User | null>(userJson ? JSON.parse(userJson) : null);
     this.currentUser = this.currentUserSubject.asObservable();

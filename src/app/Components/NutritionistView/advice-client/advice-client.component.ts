@@ -19,8 +19,6 @@ import { MatMomentDateModule } from "@angular/material-moment-adapter";
 import { ClientService, Client } from '../../../Services/Client/client.service';
 import { NutritionistService, Nutritionist } from '../../../Services/Nutritionist/nutritionist.service';
 import { AuthenticationService } from '../../../Services/Authentication/authentication.service';
-import { ConfirmDialogComponent } from '../../All/confirm-dialog/confirm-dialog.component';
-import { Observable } from 'rxjs';
 
 interface ClientWithSelection extends Client {
   isSelected: boolean;

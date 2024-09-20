@@ -24,6 +24,7 @@ import { GenerateProductComponent } from './Components/All/generate-product/gene
 import { GenerateDishComponent } from './Components/All/generate-dish/generate-dish.component';
 import { EditProductComponent } from './Components/NutritionistView/edit-product/edit-product.component';
 import { EditDishComponent } from './Components/NutritionistView/edit-dish/edit-dish.component';
+import { ReportPaymentConfirmationComponent } from './Components/AdminView/report-payment-confirmation/report-payment-confirmation.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -53,7 +54,8 @@ export const routes: Routes = [
         { path: '', redirectTo: 'registerAdmin', pathMatch: 'full' },
         { path: 'registerAdmin', component: AdminRegisterComponent },
         { path: 'confirmProduct', component: ConfirmProductComponent },
-        { path: 'reportPayment', component: ReportPaymentComponent }
+        { path: 'reportPayment', component: ReportPaymentComponent },
+        { path: 'reportPayment/confirmation/:id', component: ReportPaymentConfirmationComponent },
       ]
     },
     {

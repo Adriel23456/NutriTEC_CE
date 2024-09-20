@@ -1,0 +1,35 @@
+<div class="payment-confirmation-container">
+  <h2>Confirmación de Pago del Nutricionista</h2>
+  <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
+    <mat-card>
+      <mat-card-content>
+        <mat-form-field>
+          <mat-label>Nombre Completo</mat-label>
+          <input matInput formControlName="fullName" readonly>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Tarjeta a Cobrar</mat-label>
+          <input matInput formControlName="paymentCard" readonly>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Monto Total de Pago ($)</mat-label>
+          <input matInput formControlName="totalPaymentAmount" readonly>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Descuento (%)</mat-label>
+          <input matInput formControlName="discount" readonly>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Pago Final ($)</mat-label>
+          <input matInput formControlName="finalPayment" readonly>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+
+    <button mat-raised-button color="primary" type="submit">Reportar el pago y actualizar el Nutricionista</button>
+  </form>
+</div>

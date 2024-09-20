@@ -26,7 +26,7 @@ export interface Nutritionist {
   totalPaymentAmount: number;
   discount: number;
   finalPayment: number;
-  code: number;
+  code?: number;
   advicer?: {client: Client;}[];
 }
 
@@ -60,7 +60,7 @@ const NUTRITIONISTS: Nutritionist[] = [
         { client: { email: 'adriel.chaves888@hotmail.com', e_identifier: 'adriel.chaves888', e_domain: 'hotmail.com', fatPercentage: 15, maximumDailyConsumption: 2800, musclePercentage:30, country:'Costa Rica', inicialMeasures: 'Hip:20,Neck:30,Waist:35', im_Hip:20, im_Neck:30, im_Waist:35, imc: 16, currentWeight: 80 } as Client },
     ]
   },
-  { email: 'adriel.chaves666@nutriTECNutri.com', e_identifier: 'adriel.chaves666', e_domain: 'nutriTECNutri.com', weight: 70, imc: 25, address: 'Provincia: Heredia, Canton: San Isidro, Distrito: Lomas Verdes', a_province: 'Heredia', a_canton: 'San Isidro', a_district: 'Lomas Verdes', photo: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Ffotoapp.co%2F&psig=AOvVaw3YPIc7HlHw3ZJ3pQ7ppODE&ust=1726542686907000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIjYou--xogDFQAAAAAdAAAAABAE', paymentCard: 'Nombre: Adriel Chaves, Numero: **** **** **** 1111, CVC: ***, FechaDeExpiración: 12/12', pc_name:'Nombre', pc_number:111111111111111, pc_cvc:111, pc_expirationDate:'12/12',pc_ed_year:24,pc_ed_month:12,paymentType:'monthly',totalPaymentAmount:0,discount:0,finalPayment:0,code:51523675,
+  { email: 'adriel.chaves666@nutriTECNutri.com', e_identifier: 'adriel.chaves666', e_domain: 'nutriTECNutri.com', weight: 70, imc: 25, address: 'Provincia: Heredia, Canton: San Isidro, Distrito: Lomas Verdes', a_province: 'Heredia', a_canton: 'San Isidro', a_district: 'Lomas Verdes', photo: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Ffotoapp.co%2F&psig=AOvVaw3YPIc7HlHw3ZJ3pQ7ppODE&ust=1726542686907000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIjYou--xogDFQAAAAAdAAAAABAE', paymentCard: 'Nombre: Adriel Chaves, Numero: **** **** **** 1111, CVC: ***, FechaDeExpiración: 12/12', pc_name:'Nombre', pc_number:111111111111111, pc_cvc:111, pc_expirationDate:'12/12',pc_ed_year:24,pc_ed_month:12,paymentType:'weekly',totalPaymentAmount:0,discount:0,finalPayment:0,code:51523675,
     advicer: [
       { client: {
         email: 'adriel.chaves23456@hotmail.com',
@@ -78,7 +78,7 @@ const NUTRITIONISTS: Nutritionist[] = [
         currentWeight: 70 } as Client },
         { client: { email: 'adriel.chaves888@hotmail.com', e_identifier: 'adriel.chaves888', e_domain: 'hotmail.com', fatPercentage: 15, maximumDailyConsumption: 2800, musclePercentage:30, country:'Costa Rica', inicialMeasures: 'Hip:20,Neck:30,Waist:35', im_Hip:20, im_Neck:30, im_Waist:35, imc: 16, currentWeight: 80 } as Client },
     ] },
-  { email: 'adriel.chaves777@nutriTECNutri.com', e_identifier: 'adriel.chaves777', e_domain: 'nutriTECNutri.com', weight: 70, imc: 25, address: 'Provincia: Heredia, Canton: San Isidro, Distrito: Lomas Verdes', a_province: 'Heredia', a_canton: 'San Isidro', a_district: 'Lomas Verdes', photo: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Ffotoapp.co%2F&psig=AOvVaw3YPIc7HlHw3ZJ3pQ7ppODE&ust=1726542686907000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIjYou--xogDFQAAAAAdAAAAABAE', paymentCard: 'Nombre: Adriel Chaves, Numero: **** **** **** 1111, CVC: ***, FechaDeExpiración: 12/12', pc_name:'Nombre', pc_number:111111111111111, pc_cvc:111, pc_expirationDate:'12/12',pc_ed_year:24,pc_ed_month:12,paymentType:'monthly',totalPaymentAmount:0,discount:0,finalPayment:0,code:51523675,
+  { email: 'adriel.chaves777@nutriTECNutri.com', e_identifier: 'adriel.chaves777', e_domain: 'nutriTECNutri.com', weight: 70, imc: 25, address: 'Provincia: Heredia, Canton: San Isidro, Distrito: Lomas Verdes', a_province: 'Heredia', a_canton: 'San Isidro', a_district: 'Lomas Verdes', photo: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Ffotoapp.co%2F&psig=AOvVaw3YPIc7HlHw3ZJ3pQ7ppODE&ust=1726542686907000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIjYou--xogDFQAAAAAdAAAAABAE', paymentCard: 'Nombre: Adriel Chaves, Numero: **** **** **** 1111, CVC: ***, FechaDeExpiración: 12/12', pc_name:'Nombre', pc_number:111111111111111, pc_cvc:111, pc_expirationDate:'12/12',pc_ed_year:24,pc_ed_month:12,paymentType:'annual',totalPaymentAmount:0,discount:0,finalPayment:0,code:51523675,
     advicer: [
       { client: {
         email: 'adriel.chaves23456@hotmail.com',
