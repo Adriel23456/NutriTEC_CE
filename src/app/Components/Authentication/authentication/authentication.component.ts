@@ -57,7 +57,7 @@ export class AuthenticationComponent {
   }
 
   onForgotPassword(): void {
-    this.openDialog('Recuperación de Contraseña', 'Para recuperar su contraseña contacte al 2222-2222 y asi recibir una constaseña provisional');
+    this.openDialog('Recuperación de Contraseña', 'Para recuperar su contraseña contacte al 2222-2222 y asi recibir una contraseña provisional');
   }
   
   openDialog(title: string, message: string): void {
