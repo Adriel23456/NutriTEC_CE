@@ -253,11 +253,18 @@ export class EditDishComponent implements AfterViewInit, OnInit {
       }))
     };
 
-    // Actualizar el platillo existente
-    this.dishService.updateDish(updatedDish);
-
-    this.openDialog('Éxito', 'Se actualizó el platillo correctamente.');
-    this.router.navigate(['/sidenavNutri/manageDishProduct']);
+    // Actualizar el platillo con suscripción
+    this.dishService.updateDish(updatedDish).subscribe({
+      next: (updatedDishResponse) => {
+        console.log('Platillo actualizado exitosamente:', updatedDishResponse);
+        this.openDialog('Éxito', 'El platillo ha sido actualizado correctamente.');
+        this.router.navigate(['/sidenavNutri/manageDishProduct']);
+      },
+      error: (error) => {
+        console.error('Error al actualizar el platillo:', error);
+        this.openDialog('Error', 'Hubo un error al actualizar el platillo. Por favor, intenta de nuevo más tarde.');
+      }
+    });
   }
 
   openDialog(title: string, message: string): void {

@@ -160,6 +160,7 @@ export class GenerateDishComponent implements AfterViewInit {
   
     // Calcular los valores nutricionales totales
     for (const product of this.selectedProducts) {
+      console.log(product);
       if (product.quantity && product.servingSize) {
         const ratio = product.quantity / product.servingSize;
   
@@ -194,13 +195,20 @@ export class GenerateDishComponent implements AfterViewInit {
       products: []
     };
 
-    console.log(dish);
-  
-    // Registrar dish
-    this.dishService.registerDish(dish);
-  
-    this.openDialog('Éxito', 'Se aceptó el formulario de la generación del nuevo platillo. Queda a la espera de la confirmación de un administrador.');
-    this.router.navigate(['/sidenavNutri/manageDishProduct']);
+    // Registrar dish con suscripción
+    this.dishService.registerDish(dish).subscribe({
+      next: (newDish) => {
+        console.log('Platillo registrado exitosamente:', newDish);
+        this.openDialog('Éxito', 'Se aceptó el formulario de la generación del nuevo platillo. Queda a la espera de la confirmación de un administrador.');
+        
+        // Navegar después del registro exitoso
+        this.router.navigate(['/sidenavNutri/manageDishProduct']);
+      },
+      error: (error) => {
+        console.error('Error al registrar el platillo:', error);
+        this.openDialog('Error', 'Hubo un error al registrar el platillo. Por favor, intenta de nuevo más tarde.');
+      }
+    });
   }  
   
   openDialog(title: string, message: string): void {

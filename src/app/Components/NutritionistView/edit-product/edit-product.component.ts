@@ -117,12 +117,20 @@ export class EditProductComponent implements OnInit {
         status: 'Requested'
       };
 
-      // Llamar al servicio para actualizar el producto
-      this.productService.updateProduct(updatedProduct);
-
-      this.openDialog('Éxito', 'Se actualizó el producto correctamente.');
-
-      this.router.navigate(['/sidenavNutri/manageDishProduct']);
+      // Llamar al servicio para actualizar el producto y suscribirse a la respuesta
+      this.productService.updateProduct(updatedProduct).subscribe({
+        next: (updatedProductResponse) => {
+          console.log('Producto actualizado exitosamente:', updatedProductResponse);
+          this.openDialog('Éxito', 'El producto ha sido actualizado correctamente.');
+          
+          // Navegar a otra página después del éxito
+          this.router.navigate(['/sidenavNutri/manageDishProduct']);
+        },
+        error: (error) => {
+          console.error('Error al actualizar el producto:', error);
+          this.openDialog('Error', 'Hubo un error al actualizar el producto. Por favor, intenta de nuevo más tarde.');
+        }
+      });
     } else {
       this.openDialog('Formulario Inválido', 'Revisa los valores proporcionados y vuelve a intentarlo.');
     }

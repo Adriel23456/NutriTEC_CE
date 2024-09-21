@@ -59,7 +59,7 @@ export class GenerateProductComponent implements OnInit {
       
       // Crear instancia de Product
       const product: Product = {
-        barCode: Math.floor(Math.random() * 1000000000),
+        barCode: Math.floor(Math.random() * 1000000000), // Generar un código de barras aleatorio
         name: formData.name,
         description: formData.description,
         calcium: formData.calcium,
@@ -72,17 +72,30 @@ export class GenerateProductComponent implements OnInit {
         carbohydrates: formData.carbohydrates,
         status: 'Requested',
       };
-
-      // Registrar product
-      this.productService.registerProduct(product);
-
-      this.openDialog('Éxito', 'Se aceptó el formulario de la generacion del nuevo producto. Queda a la espera de la confirmación de un administrador.');
-
-      this.router.navigate(['/sidenavNutri/manageDishProduct']);
+  
+      // Registrar producto y manejar las respuestas de la API
+      this.productService.registerProduct(product).subscribe({
+        next: (newProduct) => {
+          console.log('Producto registrado exitosamente:', newProduct);
+          
+          // Mostrar mensaje de éxito
+          this.openDialog('Éxito', 'El producto ha sido registrado correctamente y está a la espera de confirmación de un administrador.');
+          
+          // Navegar a otra vista después del éxito
+          this.router.navigate(['/sidenavNutri/manageDishProduct']);
+        },
+        error: (error) => {
+          console.error('Error al registrar el producto:', error);
+          
+          // Mostrar mensaje de error
+          this.openDialog('Error', 'Hubo un error al registrar el producto. Por favor, intenta de nuevo más tarde.');
+        }
+      });
     } else {
-      this.openDialog('Formulario Inválido', 'Revisar cuidadosamente los valores y vuelva a mandarlo');
+      // Si el formulario no es válido, mostrar un mensaje de advertencia
+      this.openDialog('Formulario Inválido', 'Revisa cuidadosamente los valores y vuelve a enviarlo.');
     }
-  }
+  }  
   
   openDialog(title: string, message: string): void {
     this.dialog.open(DialogComponent, {
