@@ -29,7 +29,7 @@ export interface Nutritionist {
   discount: number;
   finalPayment: number;
   code: number;
-  advicer: {client: Client;}[];
+  advicer: Client[];
 }
 
 @Injectable({

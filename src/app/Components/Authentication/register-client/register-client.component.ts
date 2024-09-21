@@ -149,21 +149,41 @@ export class RegisterClientComponent implements OnInit {
       };
 
       // Registrar usuario
-      this.authService.registerUser(user);
-
-      // Registrar al cliente
-      this.clientService.registerClient(client);
-
-      // Iniciar sesión con el usuario recién creado
-      this.authService.login(user.email, user.password).subscribe(
-        loggedUser => {
-          if (loggedUser) {
-            this.router.navigate(['/sidenavClient']);
-          } else {
-            this.openDialog('Error de Autenticación', 'No se pudo iniciar sesión automáticamente.');
-          }
+      this.authService.registerUser(user).subscribe({
+        next: (newUser) => {
+          console.log('Usuario registrado en el componente:', newUser);
+          
+          // Registrar al cliente después de registrar el usuario
+          this.clientService.registerClient(client).subscribe({
+            next: (newClient) => {
+              console.log('Cliente registrado en el componente:', newClient);
+              
+              // Iniciar sesión con el usuario recién creado
+              this.authService.login(user.email, user.password).subscribe({
+                next: (loggedUser) => {
+                  if (loggedUser) {
+                    this.router.navigate(['/sidenavClient']);
+                  } else {
+                    this.openDialog('Error de Autenticación', 'No se pudo iniciar sesión automáticamente.');
+                  }
+                },
+                error: (error) => {
+                  console.error('Error al iniciar sesión:', error);
+                  this.openDialog('Error de Autenticación', 'No se pudo iniciar sesión automáticamente.');
+                }
+              });
+            },
+            error: (error) => {
+              console.error('Error al registrar el cliente:', error);
+              this.openDialog('Error', 'Ocurrió un error al registrar el cliente.');
+            }
+          });
+        },
+        error: (error) => {
+          console.error('Error al registrar el usuario:', error);
+          this.openDialog('Error', 'Ocurrió un error al registrar el usuario.');
         }
-      );
+      });
     } else {
       this.openDialog('Formulario Inválido', 'Revisar cuidadosamente los valores y vuelva a mandarlo (La contraseña debe de ser un mínimo de 6 caracteres)');
     }

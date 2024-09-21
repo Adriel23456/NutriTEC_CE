@@ -136,4 +136,19 @@ export class ClientService {
     localStorage.removeItem('currentClient');
     this.currentClientSubject.next(null);
   }
+
+  /**
+   * Obtiene un cliente según su eDomain desde la lista ya cargada.
+   * @param eDomain Dominio del cliente.
+   * @returns Observable con el cliente encontrado o null si no existe.
+   */
+  getClientByDomain(eDomain: string): Observable<Client | null> {
+    return this.clients$.pipe(
+      map(clients => clients.find(client => client.e_Domain === eDomain) || null),
+      catchError(error => {
+        console.error('Error al obtener el cliente por dominio:', error);
+        return of(null);
+      })
+    );
+  }
 }

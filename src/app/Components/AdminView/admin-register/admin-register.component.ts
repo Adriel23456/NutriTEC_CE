@@ -12,6 +12,9 @@ import { AuthenticationService, User } from '../../../Services/Authentication/au
 import { Router } from '@angular/router';
 import { DialogComponent } from '../../Authentication/dialog/dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { concatMap, tap } from 'rxjs';
+import { waitForAngularReady } from '@angular/cdk/testing/selenium-webdriver';
+import { waitForAsync } from '@angular/core/testing';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -125,18 +128,34 @@ export class AdminRegisterComponent implements OnInit {
         email: formData.email,
         e_Identifier: emailParts[0],
         e_Domain: emailParts[1],
+        // Agrega aquí cualquier otra propiedad que necesite el modelo Admin
       };
 
-      // Registrar usuario
-      this.authService.registerUser(user);
-
-      // Registrar al admin
-      this.adminService.registerAdmin(admin);
-
-      // Iniciar sesión con el usuario recién creado
-      this.openDialog('Éxito', 'Se aceptó el formulario de registro del nuevo administrador.');
-
-      this.registerForm.reset();
+      // Registrar usuario y administrador con suscripciones secuenciales
+      this.authService.registerUser(user).pipe(
+        tap(newUser => {
+          console.log('Usuario registrado en el componente:', newUser);
+        }),
+        concatMap(newUser => this.adminService.registerAdmin(admin).pipe(
+          tap(newAdmin => {
+            console.log('Administrador registrado en el componente:', newAdmin);
+          })
+        )),
+        concatMap(newAdmin => this.authService.login(user.email, user.password))
+      ).subscribe({
+        next: (loggedAdmin) => {
+          if (loggedAdmin) {
+            this.openDialog('Éxito', 'Registro de administrador completado y sesión iniciada.');
+            this.router.navigate(['/sidenavAdmin']);
+          } else {
+            this.openDialog('Error de Autenticación', 'No se pudo iniciar sesión automáticamente.');
+          }
+        },
+        error: (error) => {
+          console.error('Error en el proceso de registro:', error);
+          this.openDialog('Error', 'Ocurrió un error durante el registro. Por favor, intente de nuevo.');
+        }
+      });
     } else {
       this.openDialog('Formulario Inválido', 'Revisar cuidadosamente los valores y vuelva a mandarlo (La contraseña debe de ser un mínimo de 6 caracteres)');
     }

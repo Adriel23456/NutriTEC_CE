@@ -86,11 +86,11 @@ export class ComunicationService {
     const operation = 'POST Create User';
     this.log(operation, user); // Registrar los datos enviados
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<User>(`${this.apiUrl}/Users`, user).pipe(
+    return this.http.post<User>(`${this.apiUrl}/Users`, user, { headers }).pipe(
       tap(newUser => this.log(operation, newUser)),
       catchError(this.handleError(operation))
     );
-  }
+  }  
   
   /**
    * Actualiza parcialmente un usuario existente.

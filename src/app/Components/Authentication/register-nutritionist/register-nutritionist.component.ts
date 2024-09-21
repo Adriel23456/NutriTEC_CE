@@ -186,25 +186,45 @@ export class RegisterNutritionistComponent implements OnInit {
       advicer: []
     };
 
-    console.log(user);
-    console.log(nutritionist);
+    console.log('Usuario:', user);
+    console.log('Nutricionista:', nutritionist);
 
-    // Registrar usuario
-    this.authService.registerUser(user);
-
-    // Registrar al nutricionista
-    this.nutritionistService.registerNutritionist(nutritionist);
-
-    // Iniciar sesión con el usuario recién creado
-    this.authService.login(user.email, user.password).subscribe(
-      loggedNutri => {
-        if (loggedNutri) {
-          this.router.navigate(['/sidenavNutri']);
-        } else {
-          this.openDialog('Error de Autenticación', 'No se pudo iniciar sesión automáticamente.');
-        }
+    // Registrar usuario y nutricionista con suscripciones
+    this.nutritionistService.registerNutritionist(nutritionist).subscribe({
+      next: (newNutri) => {
+        console.log('Nutricionista registrado en el componente:', newNutri);
+        
+        // Registrar al usuario después de registrar el nutricionista
+        this.authService.registerUser(user).subscribe({
+          next: (newUser) => {
+            console.log('Usuario registrado en el componente:', newUser);
+            
+            // Iniciar sesión con el usuario recién creado
+            this.authService.login(user.email, user.password).subscribe({
+              next: (loggedNutri) => {
+                if (loggedNutri) {
+                  this.router.navigate(['/sidenavNutri']);
+                } else {
+                  this.openDialog('Error de Autenticación', 'No se pudo iniciar sesión automáticamente.');
+                }
+              },
+              error: (error) => {
+                console.error('Error al iniciar sesión:', error);
+                this.openDialog('Error de Autenticación', 'No se pudo iniciar sesión automáticamente.');
+              }
+            });
+          },
+          error: (error) => {
+            console.error('Error al registrar el usuario:', error);
+            this.openDialog('Error', 'Ocurrió un error al registrar el usuario.');
+          }
+        });
+      },
+      error: (error) => {
+        console.error('Error al registrar el nutricionista:', error);
+        this.openDialog('Error', 'Ocurrió un error al registrar el nutricionista.');
       }
-    );
+    });
   }
   
   openDialog(title: string, message: string): void {
