@@ -77,10 +77,10 @@ export class AdviceClientComponent implements AfterViewInit, OnInit {
     if (this.id !== undefined && this.id !== null) {
       this.nutritionistService.getNutritionistById(this.id).subscribe(
         (nutritionist) => {
-          this.nutritionist = nutritionist;
+          console.log(nutritionist);
           // Puedes realizar otras acciones aquí, como manejar el caso donde nutritionist es undefined
           if (!nutritionist) {
-            console.warn('Nutricionista no encontrado.');
+            console.error('Nutricionista no encontrado.');
           }
         },
         (error) => {

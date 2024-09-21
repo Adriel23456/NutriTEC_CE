@@ -83,13 +83,13 @@ export class ReportPaymentConfirmationComponent implements OnInit {
 
       // Calcular descuento
       switch (this.nutritionist.paymentType) {
-        case 'weekly':
+        case 'Semanal':
           this.nutritionist.discount = 0;
           break;
-        case 'monthly':
+        case 'Mensual':
           this.nutritionist.discount = 5;
           break;
-        case 'annual':
+        case 'Anual':
           this.nutritionist.discount = 10;
           break;
         default:

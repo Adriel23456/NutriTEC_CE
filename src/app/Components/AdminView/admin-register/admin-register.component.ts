@@ -107,12 +107,12 @@ export class AdminRegisterComponent implements OnInit {
         age: formData.age,
         password: formData.password,
         birthdate: birthdate,
-        b_day: b_day,
-        b_month: b_month,
-        b_year: b_year,
+        b_Day: b_day,
+        b_Month: b_month,
+        b_Year: b_year,
         email: formData.email,
-        e_identifier: emailParts[0],
-        e_domain: emailParts[1],
+        e_Identifier: emailParts[0],
+        e_Domain: emailParts[1],
         fullname: `${formData.fullname.name} ${formData.fullname.firstlastName} ${formData.fullname.secondlastName}`,
         name: formData.fullname.name,
         firstlastName: formData.fullname.firstlastName,
@@ -123,8 +123,8 @@ export class AdminRegisterComponent implements OnInit {
       // Crear instancia de Admin
       const admin: Admin = {
         email: formData.email,
-        e_identifier: emailParts[0],
-        e_domain: emailParts[1],
+        e_Identifier: emailParts[0],
+        e_Domain: emailParts[1],
       };
 
       // Registrar usuario

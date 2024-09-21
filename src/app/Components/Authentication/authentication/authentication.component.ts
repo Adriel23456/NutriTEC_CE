@@ -39,10 +39,10 @@ export class AuthenticationComponent {
   onLogin(): void {
     this.authenticationService.login(this.email, this.password).subscribe(user => {
       if (user) {
-        if (user.e_domain == 'nutriTECAdmin.com'){
+        if (user.e_Domain == 'nutriTECAdmin.com'){
           this.adminService.saveAdmin(this.email);
           this.router.navigate(['/sidenavAdmin']);
-        } else if (user.e_domain == 'nutriTECNutri.com') {
+        } else if (user.e_Domain == 'nutriTECNutri.com') {
           this.nutritionistService.saveNutritionist(this.email);
           this.router.navigate(['/sidenavNutri']);
         } else {

@@ -8,28 +8,28 @@ import { Client } from '../Client/client.service';
 
 export interface Nutritionist {
   email: string;
-  e_identifier: string;
-  e_domain: string;
-  weight?: number;
-  imc?: number;
-  address?: string;
-  a_province?: string;
-  a_canton?: string;
-  a_district?: string;
-  photo?: string;
-  paymentCard?: string;
-  pc_name?: string;
-  pc_number?: number;
-  pc_cvc?: number;
-  pc_expirationDate?: string;
-  pc_ed_year?: number;
-  pc_ed_month?: number;
-  paymentType?: string;
-  totalPaymentAmount?: number;
-  discount?: number;
-  finalPayment?: number;
-  code?: number;
-  advicer?: {client: Client;}[];
+  e_Identifier: string;
+  e_Domain: string;
+  weight: number;
+  imc: number;
+  address: string;
+  a_Province: string;
+  a_Canton: string;
+  a_District: string;
+  photo: string;
+  paymentCard: string;
+  pc_Name: string;
+  pc_Number: number;
+  pc_Cvc: number;
+  pc_ExpirationDate: string;
+  pc_Ed_Year: number;
+  pc_Ed_Month: number;
+  paymentType: string;
+  totalPaymentAmount: number;
+  discount: number;
+  finalPayment: number;
+  code: number;
+  advicer: {client: Client;}[];
 }
 
 @Injectable({
@@ -166,7 +166,7 @@ export class NutritionistService {
    * @returns Observable con el nutricionista actualizado.
    */
   updateNutritionist(updatedNutritionist: Nutritionist): Observable<Nutritionist | void> {
-    return this.communicationService.updateNutritionist(updatedNutritionist.e_identifier, updatedNutritionist).pipe(
+    return this.communicationService.updateNutritionist(updatedNutritionist.e_Identifier, updatedNutritionist).pipe(
       tap(() => {
         const nutritionists = this.nutritionistsSubject.value;
         const index = nutritionists.findIndex(n => n.email === updatedNutritionist.email);

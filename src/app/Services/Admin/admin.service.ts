@@ -6,8 +6,8 @@ import { catchError, tap, map } from 'rxjs/operators';
 
 export interface Admin {
   email: string;
-  e_identifier: string;
-  e_domain: string;
+  e_Identifier: string;
+  e_Domain: string;
 }
 
 @Injectable({
@@ -99,18 +99,18 @@ export class AdminService {
     return this.communicationService.updateAdmin(id, updatedAdmin).pipe(
       tap(() => {
         const admins = this.adminsSubject.value;
-        const index = admins.findIndex(a => a.e_identifier === updatedAdmin.e_identifier);
+        const index = admins.findIndex(a => a.e_Identifier === updatedAdmin.e_Identifier);
         if (index !== -1) {
           admins[index] = { ...admins[index], ...updatedAdmin };
           this.adminsSubject.next([...admins]);
           // Actualizar en localStorage si es el admin actual
-          if (this.currentAdminValue?.e_identifier === updatedAdmin.e_identifier) {
+          if (this.currentAdminValue?.e_Identifier === updatedAdmin.e_Identifier) {
             this.currentAdminSubject.next(admins[index]);
             localStorage.setItem('currentAdmin', JSON.stringify(admins[index]));
           }
         }
       }),
-      map(() => this.adminsSubject.value.find(a => a.e_identifier === updatedAdmin.e_identifier) || null),
+      map(() => this.adminsSubject.value.find(a => a.e_Identifier === updatedAdmin.e_Identifier) || null),
       catchError(error => {
         console.error('Error al actualizar el administrador:', error);
         return throwError(() => error);

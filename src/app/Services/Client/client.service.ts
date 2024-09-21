@@ -7,8 +7,8 @@ import { throwError } from 'rxjs';
 
 export interface Client {
   email: string;
-  e_identifier: string;
-  e_domain: string;
+  e_Identifier: string;
+  e_Domain: string;
   fatPercentage: number;
   maximumDailyConsumption: number;
   musclePercentage: number;
@@ -110,18 +110,18 @@ export class ClientService {
     return this.communicationService.updateClient(eIdentifier, updatedClient).pipe(
       tap(() => {
         const clients = this.clientsSubject.value;
-        const index = clients.findIndex(c => c.e_identifier === eIdentifier);
+        const index = clients.findIndex(c => c.e_Identifier === eIdentifier);
         if (index !== -1) {
           clients[index] = { ...clients[index], ...updatedClient };
           this.clientsSubject.next([...clients]);
           // Actualizar en localStorage si es el cliente actual
-          if (this.currentClientValue?.e_identifier === eIdentifier) {
+          if (this.currentClientValue?.e_Identifier === eIdentifier) {
             this.currentClientSubject.next(clients[index]);
             localStorage.setItem('currentClient', JSON.stringify(clients[index]));
           }
         }
       }),
-      map(() => this.clientsSubject.value.find(c => c.e_identifier === eIdentifier) || null),
+      map(() => this.clientsSubject.value.find(c => c.e_Identifier === eIdentifier) || null),
       catchError(error => {
         console.error('Error al actualizar el cliente:', error);
         return of(null);

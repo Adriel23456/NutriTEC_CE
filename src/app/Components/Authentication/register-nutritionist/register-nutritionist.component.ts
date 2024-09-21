@@ -47,7 +47,7 @@ export const MY_DATE_FORMATS = {
 })
 export class RegisterNutritionistComponent implements OnInit {
   registerForm: FormGroup;
-  paymentTypes: string[] = ['Mensual', 'Anual'];
+  paymentTypes: string[] = ['Mensual', 'Anual', 'Semanal'];
 
   constructor(
     private authService: AuthenticationService,
@@ -146,12 +146,12 @@ export class RegisterNutritionistComponent implements OnInit {
       age: formData.age,
       password: formData.password,
       birthdate: birthdate,
-      b_day: b_day,
-      b_month: b_month,
-      b_year: b_year,
+      b_Day: b_day,
+      b_Month: b_month,
+      b_Year: b_year,
       email: formData.email,
-      e_identifier: emailParts[0],
-      e_domain: emailParts[1],
+      e_Identifier: emailParts[0],
+      e_Domain: emailParts[1],
       fullname: `${formData.fullname.name} ${formData.fullname.firstlastName} ${formData.fullname.secondlastName}`,
       name: formData.fullname.name,
       firstlastName: formData.fullname.firstlastName,
@@ -162,27 +162,28 @@ export class RegisterNutritionistComponent implements OnInit {
     // Crear instancia de Nutritionist
     const nutritionist: Nutritionist = {
       email: formData.email,
-      e_identifier: emailParts[0],
-      e_domain: emailParts[1],
+      e_Identifier: emailParts[0],
+      e_Domain: emailParts[1],
       weight: formData.weight,
       imc: formData.imc,
       address: `Provincia: ${formData.address.a_province}, Canton: ${formData.address.a_canton}, Distrito: ${formData.address.a_district}`,
-      a_province: formData.address.a_province,
-      a_canton: formData.address.a_canton,
-      a_district: formData.address.a_district,
+      a_Province: formData.address.a_province,
+      a_Canton: formData.address.a_canton,
+      a_District: formData.address.a_district,
       photo: formData.photo,
       paymentCard: `Nombre: ${formData.paymentCard.pc_name}, Numero: **** **** **** ${formData.paymentCard.pc_number.slice(-4)}, CVC: ***, FechaDeExpiración: ${formData.paymentCard.pc_expirationDate.pc_ed_month}/${formData.paymentCard.pc_expirationDate.pc_ed_year}`,
-      pc_name: formData.paymentCard.pc_name,
-      pc_number: formData.paymentCard.pc_number,
-      pc_cvc: formData.paymentCard.pc_cvc,
-      pc_expirationDate: `${formData.paymentCard.pc_expirationDate.pc_ed_month}/${formData.paymentCard.pc_expirationDate.pc_ed_year}`,
-      pc_ed_year: formData.paymentCard.pc_expirationDate.pc_ed_year,
-      pc_ed_month: formData.paymentCard.pc_expirationDate.pc_ed_month,
+      pc_Name: formData.paymentCard.pc_name,
+      pc_Number: formData.paymentCard.pc_number,
+      pc_Cvc: formData.paymentCard.pc_cvc,
+      pc_ExpirationDate: `${formData.paymentCard.pc_expirationDate.pc_ed_month}/${formData.paymentCard.pc_expirationDate.pc_ed_year}`,
+      pc_Ed_Year: formData.paymentCard.pc_expirationDate.pc_ed_year,
+      pc_Ed_Month: formData.paymentCard.pc_expirationDate.pc_ed_month,
       paymentType: formData.paymentType,
       totalPaymentAmount: 0,
       discount: 0,
       finalPayment: 0,
-      code: formData.code
+      code: formData.code,
+      advicer: []
     };
 
     console.log(user);

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject, of, throwError } from 'rxjs';
 import { Router } from "@angular/router";
 import { tap, map, catchError } from 'rxjs/operators';
 import { ComunicationService } from '../All/comunication.service';
@@ -9,12 +9,12 @@ export interface User {
   age: number;
   password: string;
   birthdate: string;
-  b_day: number;
-  b_month: number;
-  b_year: number;
+  b_Day: number;
+  b_Month: number;
+  b_Year: number;
   email: string;
-  e_identifier: string;
-  e_domain: string;
+  e_Identifier: string;
+  e_Domain: string;
   fullname: string;
   name: string;
   firstlastName: string;
@@ -83,10 +83,11 @@ export class AuthenticationService {
         // Actualiza la lista local de usuarios
         const currentUsers = this.usersSubject.value;
         this.usersSubject.next([...currentUsers, newUser]);
+        console.log('Usuario registrado exitosamente:', newUser);
       }),
       catchError(error => {
-        console.error('Error al registrar el usuario:', error);
-        throw error;
+        console.error('Error al registrar el usuario:', error.message);
+        return throwError(() => error);
       })
     );
   }
@@ -130,7 +131,7 @@ export class AuthenticationService {
    */
   getAdmins(): Observable<User[]> {
     return this.users$.pipe(
-      map(users => users.filter(user => user.e_domain === 'nutriTECAdmin.com')),
+      map(users => users.filter(user => user.e_Domain === 'nutriTECAdmin.com')),
       catchError(error => {
         console.error('Error al obtener administradores:', error);
         return of([]);

@@ -191,6 +191,7 @@ export class GenerateDishComponent implements AfterViewInit {
       protein: totalProtein,
       carbohydrates: totalCarbohydrates,
       status: 'Requested',
+      products: []
     };
 
     console.log(dish);

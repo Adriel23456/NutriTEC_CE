@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../Authentication/authentication.service';
 import { Client } from '../Client/client.service';
@@ -7,6 +7,9 @@ import { Nutritionist } from '../Nutritionist/nutritionist.service';
 import { Product } from '../All/product.service';
 import { Dish } from '../All/dish.service';
 import { Admin } from '../Admin/admin.service';
+import { HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { catchError, tap } from 'rxjs/operators';
+
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +18,35 @@ export class ComunicationService {
   private apiUrl = 'http://localhost:5207/api';
 
   constructor(private http: HttpClient) { }
+
+  /**
+   * Maneja los errores de las solicitudes HTTP.
+   * @param operation Nombre de la operación que falló.
+   * @returns Función que maneja el error.
+   */
+  private handleError(operation: string) {
+    return (error: HttpErrorResponse): Observable<never> => {
+      if (error.error instanceof ErrorEvent) {
+        // Error del lado del cliente o de la red
+        console.error(`${operation} - Error de cliente:`, error.error.message);
+      } else {
+        // Error del lado del servidor
+        console.error(`${operation} - Código de estado: ${error.status}, ` +
+                      `Error: ${error.error.message || error.message}`);
+      }
+      // Retorna un observable con un mensaje de error amigable
+      return throwError(() => new Error(`${operation} falló: ${error.error.message || error.message}`));
+    };
+  }
+
+  /**
+   * Opcional: Método para registrar detalles de las solicitudes y respuestas.
+   * @param operation Nombre de la operación.
+   * @param data Datos enviados o recibidos.
+   */
+  private log(operation: string, data: any) {
+    console.log(`${operation} - Datos:`, data);
+  }
 
   // -----------------------------------
   // Métodos para User (Identificado por id)
@@ -25,7 +57,11 @@ export class ComunicationService {
    * @returns Observable con la lista de usuarios.
    */
   getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.apiUrl}/Users`);
+    const operation = 'GET Users';
+    return this.http.get<User[]>(`${this.apiUrl}/Users`).pipe(
+      tap(users => this.log(operation, users)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
@@ -34,7 +70,11 @@ export class ComunicationService {
    * @returns Observable con el usuario solicitado.
    */
   getUserById(id: number): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/Users/${id}`);
+    const operation = `GET User By ID: ${id}`;
+    return this.http.get<User>(`${this.apiUrl}/Users/${id}`).pipe(
+      tap(user => this.log(operation, user)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
@@ -43,9 +83,15 @@ export class ComunicationService {
    * @returns Observable con el usuario creado.
    */
   createUser(user: User): Observable<User> {
-    return this.http.post<User>(`${this.apiUrl}/Users`, user);
+    const operation = 'POST Create User';
+    this.log(operation, user); // Registrar los datos enviados
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<User>(`${this.apiUrl}/Users`, user).pipe(
+      tap(newUser => this.log(operation, newUser)),
+      catchError(this.handleError(operation))
+    );
   }
-
+  
   /**
    * Actualiza parcialmente un usuario existente.
    * @param id Identificador único del usuario.
@@ -53,7 +99,12 @@ export class ComunicationService {
    * @returns Observable vacío.
    */
   updateUser(id: number, user: Partial<User>): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/Users/${id}`, user);
+    const operation = `PATCH Update User ID: ${id}`;
+    this.log(operation, user); // Registrar los datos enviados
+    return this.http.patch<void>(`${this.apiUrl}/Users/${id}`, user).pipe(
+      tap(() => this.log(operation, 'Actualización exitosa')),
+      catchError(this.handleError(operation))
+    );
   }
 
   // -----------------------------------
@@ -65,7 +116,11 @@ export class ComunicationService {
    * @returns Observable con la lista de administradores.
    */
   getAdmins(): Observable<Admin[]> {
-    return this.http.get<Admin[]>(`${this.apiUrl}/Admins`);
+    const operation = 'GET Admins';
+    return this.http.get<Admin[]>(`${this.apiUrl}/Admins`).pipe(
+      tap(admins => this.log(operation, admins)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
@@ -74,7 +129,11 @@ export class ComunicationService {
    * @returns Observable con el administrador solicitado.
    */
   getAdminById(id: number): Observable<Admin> {
-    return this.http.get<Admin>(`${this.apiUrl}/Admins/${id}`);
+    const operation = `GET Admin By ID: ${id}`;
+    return this.http.get<Admin>(`${this.apiUrl}/Admins/${id}`).pipe(
+      tap(admin => this.log(operation, admin)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
@@ -83,7 +142,13 @@ export class ComunicationService {
    * @returns Observable con el administrador creado.
    */
   createAdmin(admin: Admin): Observable<Admin> {
-    return this.http.post<Admin>(`${this.apiUrl}/Admins`, admin);
+    const operation = 'POST Create Admin';
+    this.log(operation, admin);
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<Admin>(`${this.apiUrl}/Admins`, admin, { headers }).pipe(
+      tap(newAdmin => this.log(operation, newAdmin)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
@@ -93,7 +158,12 @@ export class ComunicationService {
    * @returns Observable vacío.
    */
   updateAdmin(id: number, admin: Partial<Admin>): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/Admins/${id}`, admin);
+    const operation = `PATCH Update Admin ID: ${id}`;
+    this.log(operation, admin);
+    return this.http.patch<void>(`${this.apiUrl}/Admins/${id}`, admin).pipe(
+      tap(() => this.log(operation, 'Actualización exitosa')),
+      catchError(this.handleError(operation))
+    );
   }
 
   // -----------------------------------
@@ -145,7 +215,11 @@ export class ComunicationService {
    * @returns Observable con la lista de nutricionistas.
    */
   getNutritionists(): Observable<Nutritionist[]> {
-    return this.http.get<Nutritionist[]>(`${this.apiUrl}/nutritionists`);
+    const operation = 'GET Nutritionists';
+    return this.http.get<Nutritionist[]>(`${this.apiUrl}/nutritionists`).pipe(
+      tap(nutritionists => this.log(operation, nutritionists)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
@@ -154,7 +228,11 @@ export class ComunicationService {
    * @returns Observable booleano indicando si el código es válido.
    */
   verifyNutritionistCode(code: number): Observable<boolean> {
-    return this.http.get<boolean>(`${this.apiUrl}/nutritionists/verifyCode/${code}`);
+    const operation = `GET Verify Nutritionist Code: ${code}`;
+    return this.http.get<boolean>(`${this.apiUrl}/nutritionists/verifyCode/${code}`).pipe(
+      tap(isValid => this.log(operation, isValid)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
@@ -163,7 +241,11 @@ export class ComunicationService {
    * @returns Observable con el nutricionista solicitado.
    */
   getNutritionistByIdentifier(eIdentifier: string): Observable<Nutritionist> {
-    return this.http.get<Nutritionist>(`${this.apiUrl}/nutritionists/${eIdentifier}`);
+    const operation = `GET Nutritionist By Identifier: ${eIdentifier}`;
+    return this.http.get<Nutritionist>(`${this.apiUrl}/nutritionists/${eIdentifier}`).pipe(
+      tap(nutritionist => this.log(operation, nutritionist)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
@@ -172,7 +254,13 @@ export class ComunicationService {
    * @returns Observable con el nutricionista creado.
    */
   createNutritionist(nutritionist: Nutritionist): Observable<Nutritionist> {
-    return this.http.post<Nutritionist>(`${this.apiUrl}/nutritionists`, nutritionist);
+    const operation = 'POST Create Nutritionist';
+    this.log(operation, nutritionist);
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<Nutritionist>(`${this.apiUrl}/nutritionists`, nutritionist, { headers }).pipe(
+      tap(newNutritionist => this.log(operation, newNutritionist)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
@@ -182,7 +270,12 @@ export class ComunicationService {
    * @returns Observable vacío.
    */
   updateNutritionist(eIdentifier: string, nutritionist: Partial<Nutritionist>): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/nutritionists/${eIdentifier}`, nutritionist);
+    const operation = `PATCH Update Nutritionist Identifier: ${eIdentifier}`;
+    this.log(operation, nutritionist);
+    return this.http.patch<void>(`${this.apiUrl}/nutritionists/${eIdentifier}`, nutritionist).pipe(
+      tap(() => this.log(operation, 'Actualización exitosa')),
+      catchError(this.handleError(operation))
+    );
   }
 
   // -----------------------------------

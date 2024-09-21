@@ -17,7 +17,7 @@ export interface Dish {
   protein: number;
   carbohydrates: number;
   status: string;
-  products?: { product: Product; quantity: number }[];
+  products: { product: Product; quantity: number }[];
 }
 
 @Injectable({

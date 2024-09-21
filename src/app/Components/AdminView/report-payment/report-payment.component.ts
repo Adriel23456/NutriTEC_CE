@@ -62,7 +62,7 @@ export class ReportPaymentComponent implements AfterViewInit, OnInit {
   ngOnInit(): void {
     this.authService.users$.subscribe(users => {
       // Filtrar solo los usuarios que son nutricionistas
-      const nutritionistUsers = users.filter(user => user.e_domain === 'nutriTECNutri.com');
+      const nutritionistUsers = users.filter(user => user.e_Domain === 'nutriTECNutri.com');
       this.dataSource.data = nutritionistUsers;
     });
   }

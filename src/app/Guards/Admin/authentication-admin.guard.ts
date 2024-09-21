@@ -6,9 +6,9 @@ export const authenticationAdminGuard: CanActivateFn = (route, state) => {
   const authenticationService = inject(AuthenticationService);
   const router = inject(Router);
   const currentUser = authenticationService.currentUserValue;
-  if (currentUser?.e_domain == 'nutriTECAdmin.com') {
+  if (currentUser?.e_Domain == 'nutriTECAdmin.com') {
     return true; // Estoy donde deberia de estár
-  } else if (currentUser?.e_domain == 'nutriTECNutri.com'){
+  } else if (currentUser?.e_Domain == 'nutriTECNutri.com'){
     return router.createUrlTree(['/sidenavNutri']); // Redirige a Nutricionista
   } else if (currentUser){
     return router.createUrlTree(['/sidenavClient']); // Redirige a Cliente
