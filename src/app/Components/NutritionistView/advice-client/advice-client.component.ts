@@ -72,51 +72,50 @@ export class AdviceClientComponent implements AfterViewInit, OnInit {
   ngOnInit(): void {
     // Obtener el id del usuario actual
     this.id = this.authService.currentUserValue?.id;
-
+  
     // Cargar el nutricionista
     if (this.id !== undefined && this.id !== null) {
       this.nutritionistService.getNutritionistById(this.id).subscribe(
         (nutritionist) => {
-          console.log(nutritionist);
-          // Puedes realizar otras acciones aquí, como manejar el caso donde nutritionist es undefined
-          if (!nutritionist) {
-            console.error('Nutricionista no encontrado.');
+          this.nutritionist = nutritionist;  
+          if (this.nutritionist) {
+            // Cargar los clientes dentro del subscribe para asegurarse de que nutritionist está definido
+            this.clientService.clients$.subscribe(clients => {
+              this.clients = clients.map(client => ({
+                ...client,
+                isSelected: false
+              }));
+              // Preseleccionar los clientes que ya está asesorando
+              if (this.nutritionist!.advicer) {
+                for (const nutritionistAdvicer of this.nutritionist!.advicer) {
+                  const clientInList = this.clients.find(client => client.email === nutritionistAdvicer.email);
+                  if (clientInList) {
+                    clientInList.isSelected = true;
+                  }
+                }
+              }
+  
+              this.dataSource.data = this.clients;
+            });
+            this.clientService.loadClients();
+          } else {
+            // Manejar el caso donde el nutricionista no se encuentra
+            this.openDialog('Error', 'El nutricionista no fue encontrado.');
+            this.router.navigate(['/sidenavNutri/startInfoNutri']);
           }
         },
         (error) => {
           console.error('Error al obtener el nutricionista:', error);
+          // Manejar el error, posiblemente redirigir o mostrar un mensaje al usuario
+          this.openDialog('Error', 'Ocurrió un error al obtener el nutricionista.');
         }
       );
     } else {
       console.error('ID de nutricionista no proporcionado.');
-    }
-    if (this.nutritionist) {
-      // Cargar los clientes
-      this.clientService.clients$.subscribe(clients => {
-        this.clients = clients.map(client => ({
-          ...client,
-          isSelected: false
-        }));
-
-        // Preseleccionar los clientes que ya está asesorando
-        if (this.nutritionist!.advicer) {
-          for (const nutritionistAdvicer of this.nutritionist!.advicer) {
-            const clientInList = this.clients.find(client => client.email === nutritionistAdvicer.client.email);
-            if (clientInList) {
-              clientInList.isSelected = true;
-            }
-          }
-        }
-
-        this.dataSource.data = this.clients;
-      });
-      this.clientService.loadClients();
-    } else {
-      // Manejar el caso donde el nutricionista no se encuentra
-      this.openDialog('Error', 'El nutricionista no fue encontrado.');
+      this.openDialog('Error', 'ID de nutricionista no proporcionado.');
       this.router.navigate(['/sidenavNutri/startInfoNutri']);
     }
-  }
+  } 
 
   createFilter(): (data: any, filter: string) => boolean {
     return (data: ClientWithSelection, filter: string): boolean => {
@@ -142,27 +141,34 @@ export class AdviceClientComponent implements AfterViewInit, OnInit {
     client.isSelected = !client.isSelected;
     if (this.nutritionist) {
       if (client.isSelected) {
-        // Agregar cliente a advicer
+        // Agregar cliente a advicer si no está ya
         if (!this.nutritionist.advicer) {
           this.nutritionist.advicer = [];
         }
-        const alreadyAdvising = this.nutritionist.advicer.find(a => a.client.email === client.email);
+        const alreadyAdvising = this.nutritionist.advicer.find(a => a.email === client.email);
         if (!alreadyAdvising) {
-          this.nutritionist.advicer.push({ client });
+          this.nutritionist.advicer.push( client );
         }
-        this.openDialog('Cliente Asignado', `Has empezado a asesorar al cliente ${client.email}.`);
       } else {
-        // Remover cliente de advicer
+        // Remover cliente de advicer si existe
         if (this.nutritionist.advicer) {
-          const index = this.nutritionist.advicer.findIndex(a => a.client.email === client.email);
+          const index = this.nutritionist.advicer.findIndex(a => a.email === client.email);
           if (index !== -1) {
             this.nutritionist.advicer.splice(index, 1);
           }
         }
-        this.openDialog('Cliente Removido', `Has dejado de asesorar al cliente ${client.email}.`);
       }
-      // Actualizar los datos del nutricionista
-      this.nutritionistService.updateNutritionist(this.nutritionist);
+      // Actualizar los datos del nutricionista con suscripción
+      this.nutritionistService.updateNutritionist(this.nutritionist).subscribe({
+        next: (updatedNutri) => {
+          console.log('Nutricionista actualizado:', updatedNutri);
+          this.openDialog(`Actualización Exitosa`, `Cliente seleccionado: ${client.email}.`);
+        },
+        error: (error) => {
+          console.error('Error al actualizar nutricionista:', error);
+          this.openDialog('Error', 'Ocurrió un error al actualizar el nutricionista.');
+        }
+      });
     }
   }
 
