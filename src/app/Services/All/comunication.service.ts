@@ -175,7 +175,11 @@ export class ComunicationService {
    * @returns Observable con la lista de clientes.
    */
   getClients(): Observable<Client[]> {
-    return this.http.get<Client[]>(`${this.apiUrl}/Clients`);
+    const operation = 'GET Clients';
+    return this.http.get<Client[]>(`${this.apiUrl}/Clients`).pipe(
+      tap(clients => this.log(operation, clients)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
@@ -184,16 +188,26 @@ export class ComunicationService {
    * @returns Observable con el cliente solicitado.
    */
   getClientByIdentifier(eIdentifier: string): Observable<Client> {
-    return this.http.get<Client>(`${this.apiUrl}/Clients/${eIdentifier}`);
+    const operation = `GET Client By Identifier: ${eIdentifier}`;
+    return this.http.get<Client>(`${this.apiUrl}/Clients/${eIdentifier}`).pipe(
+      tap(client => this.log(operation, client)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
    * Crea un nuevo cliente.
-   * @param client Objeto de cliente a crear (sin barCode).
+   * @param client Objeto de cliente a crear.
    * @returns Observable con el cliente creado.
    */
   createClient(client: Client): Observable<Client> {
-    return this.http.post<Client>(`${this.apiUrl}/Clients`, client);
+    const operation = 'POST Create Client';
+    this.log(operation, client);
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<Client>(`${this.apiUrl}/Clients`, client, { headers }).pipe(
+      tap(newClient => this.log(operation, newClient)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
@@ -203,7 +217,12 @@ export class ComunicationService {
    * @returns Observable vacío.
    */
   updateClient(eIdentifier: string, client: Partial<Client>): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/Clients/${eIdentifier}`, client);
+    const operation = `PATCH Update Client Identifier: ${eIdentifier}`;
+    this.log(operation, client);
+    return this.http.patch<void>(`${this.apiUrl}/Clients/${eIdentifier}`, client).pipe(
+      tap(() => this.log(operation, 'Actualización exitosa')),
+      catchError(this.handleError(operation))
+    );
   }
 
   // -----------------------------------
@@ -287,7 +306,11 @@ export class ComunicationService {
    * @returns Observable con la lista de productos.
    */
   getProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(`${this.apiUrl}/Products`);
+    const operation = 'GET Products';
+    return this.http.get<Product[]>(`${this.apiUrl}/Products`).pipe(
+      tap(products => this.log(operation, products)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
@@ -296,16 +319,26 @@ export class ComunicationService {
    * @returns Observable con el producto solicitado.
    */
   getProductByBarCode(barCode: number): Observable<Product> {
-    return this.http.get<Product>(`${this.apiUrl}/Products/${barCode}`);
+    const operation = `GET Product By BarCode: ${barCode}`;
+    return this.http.get<Product>(`${this.apiUrl}/Products/${barCode}`).pipe(
+      tap(product => this.log(operation, product)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
    * Crea un nuevo producto.
-   * @param product Objeto de producto a crear (sin barCode).
+   * @param product Objeto de producto a crear.
    * @returns Observable con el producto creado.
    */
   createProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>(`${this.apiUrl}/Products`, product);
+    const operation = 'POST Create Product';
+    this.log(operation, product);
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<Product>(`${this.apiUrl}/Products`, product, { headers }).pipe(
+      tap(newProduct => this.log(operation, newProduct)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
@@ -315,7 +348,12 @@ export class ComunicationService {
    * @returns Observable vacío.
    */
   updateProduct(barCode: number, product: Partial<Product>): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/Products/${barCode}`, product);
+    const operation = `PATCH Update Product BarCode: ${barCode}`;
+    this.log(operation, product);
+    return this.http.patch<void>(`${this.apiUrl}/Products/${barCode}`, product).pipe(
+      tap(() => this.log(operation, 'Actualización exitosa')),
+      catchError(this.handleError(operation))
+    );
   }
 
   // -----------------------------------
@@ -327,7 +365,11 @@ export class ComunicationService {
    * @returns Observable con la lista de platos.
    */
   getDishes(): Observable<Dish[]> {
-    return this.http.get<Dish[]>(`${this.apiUrl}/Dishes`);
+    const operation = 'GET Dishes';
+    return this.http.get<Dish[]>(`${this.apiUrl}/Dishes`).pipe(
+      tap(dishes => this.log(operation, dishes)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
@@ -336,16 +378,26 @@ export class ComunicationService {
    * @returns Observable con el plato solicitado.
    */
   getDishByBarCode(barCode: number): Observable<Dish> {
-    return this.http.get<Dish>(`${this.apiUrl}/Dishes/${barCode}`);
+    const operation = `GET Dish By BarCode: ${barCode}`;
+    return this.http.get<Dish>(`${this.apiUrl}/Dishes/${barCode}`).pipe(
+      tap(dish => this.log(operation, dish)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
    * Crea un nuevo plato.
-   * @param dish Objeto de plato a crear (sin barCode).
+   * @param dish Objeto de plato a crear.
    * @returns Observable con el plato creado.
    */
   createDish(dish: Dish): Observable<Dish> {
-    return this.http.post<Dish>(`${this.apiUrl}/Dishes`, dish);
+    const operation = 'POST Create Dish';
+    this.log(operation, dish);
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<Dish>(`${this.apiUrl}/Dishes`, dish, { headers }).pipe(
+      tap(newDish => this.log(operation, newDish)),
+      catchError(this.handleError(operation))
+    );
   }
 
   /**
@@ -355,6 +407,11 @@ export class ComunicationService {
    * @returns Observable vacío.
    */
   updateDish(barCode: number, dish: Partial<Dish>): Observable<void> {
-    return this.http.patch<void>(`${this.apiUrl}/Dishes/${barCode}`, dish);
+    const operation = `PATCH Update Dish BarCode: ${barCode}`;
+    this.log(operation, dish);
+    return this.http.patch<void>(`${this.apiUrl}/Dishes/${barCode}`, dish).pipe(
+      tap(() => this.log(operation, 'Actualización exitosa')),
+      catchError(this.handleError(operation))
+    );
   }
 }
